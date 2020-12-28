@@ -1,7 +1,5 @@
 package com.project.spring.digitalwallet.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 
 import lombok.*;
@@ -15,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
@@ -27,6 +24,7 @@ import javax.persistence.GenerationType;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,20 +39,8 @@ public class User implements UserDetails{
     private String firstname;
     @NotNull
     private String lastname;
+    private long walletId;
 
-
-    public User(String firstName,String lastName,String username,String email,String password) {
-    	this.email=email;
-    	this.firstname=firstName;
-    	this.lastname=lastName;
-    	this.username=username;
-    	this.password=password;
-    	this.role=Role.User;
-    }
-
-	public User() {
-		
-	}
 	private Role role;
 	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

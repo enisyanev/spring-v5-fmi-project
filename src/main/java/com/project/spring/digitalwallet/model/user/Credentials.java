@@ -1,4 +1,4 @@
-package com.project.spring.digitalwallet.model;
+package com.project.spring.digitalwallet.model.user;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

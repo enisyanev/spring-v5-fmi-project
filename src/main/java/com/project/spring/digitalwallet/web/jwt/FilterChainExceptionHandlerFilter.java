@@ -1,21 +1,17 @@
-package com.project.spring.digitalwallet.web;
+package com.project.spring.digitalwallet.web.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.spring.digitalwallet.model.ErrorResponse;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import com.project.spring.digitalwallet.web.advice.ErrorHandlerControllerAdvice;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

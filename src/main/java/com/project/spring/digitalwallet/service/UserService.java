@@ -2,6 +2,7 @@ package com.project.spring.digitalwallet.service;
 import java.util.List;
 import java.util.Set;
 
+import com.project.spring.digitalwallet.model.Role;
 import com.project.spring.digitalwallet.model.User;
 
 
@@ -47,29 +48,22 @@ public class UserService  {
 
 
     public User addUser(User user) {
-
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
-       // return null;
+       PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+       user.setPassword(encoder.encode(user.getPassword()));
+       user.setRole(Role.User);
        return userRepo.save(user);
     }
-/*
-    @Override
+
     public User updateUser(User user) {
-        getUserById(user.getId());
-        user.setModified(LocalDateTime.now());
+    	userRepo.findByUsername(user.getUsername()).orElseThrow(() ->
+             new InvalidEntityDataException("No user with tha name"));
         return userRepo.save(user);
     }
-
-    @Override
-    public User deleteUser(String id) {
-        User removed = getUserById(id);
-        userRepo.deleteById(id);
+    
+    public User deleteUser(String username) {
+        User removed = getUserByUsername(username);
+        userRepo.deleteByUsername(username);
         return removed;
     }
-
-    @Override
-    public long getCount() {
-        return userRepo.count();
-    }*/
+     
 }

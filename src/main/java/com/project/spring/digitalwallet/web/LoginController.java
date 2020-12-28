@@ -48,11 +48,7 @@ public class LoginController {
     }
 
     @PostMapping("/api/register")
-    public User register(@Valid @RequestBody Map<String,String> usermap, Errors errors){
-        /*if(errors.hasErrors()){
-            new InvalidEntityDataException("Invalid user data",  getViolationsAsStringList(errors));
-        }*/
-        User user=new User(usermap.get("firstName"),usermap.get("lastName"),usermap.get("username"),usermap.get("email"),usermap.get("password"));
+    public User register(@Valid @RequestBody User user, Errors errors){
         return userService.addUser(user);
     }
 }

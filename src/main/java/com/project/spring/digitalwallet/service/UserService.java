@@ -50,7 +50,7 @@ public class UserService  {
 
     public User updateUser(User user) {
     	userRepo.findByUsername(user.getUsername()).orElseThrow(() ->
-             new InvalidEntityDataException("No user with tha name"));
+             new InvalidEntityDataException("No user with that name"));
         return userRepo.save(user);
     }
     

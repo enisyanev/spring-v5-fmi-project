@@ -1,4 +1,4 @@
-package com.project.spring.digitalwallet.web;
+package com.project.spring.digitalwallet.web.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

@@ -1,6 +1,4 @@
-package com.project.spring.digitalwallet.model;
-
-import com.sun.istack.NotNull;
+package com.project.spring.digitalwallet.model.user;
 
 import lombok.*;
 import javax.persistence.Id;
@@ -18,6 +16,7 @@ import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="User")

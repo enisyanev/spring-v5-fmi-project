@@ -1,9 +1,8 @@
 package com.project.spring.digitalwallet.service;
 import java.util.List;
-import java.util.Set;
 
-import com.project.spring.digitalwallet.model.Role;
-import com.project.spring.digitalwallet.model.User;
+import com.project.spring.digitalwallet.model.user.Role;
+import com.project.spring.digitalwallet.model.user.User;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,6 @@ import org.springframework.stereotype.Service;
 import com.project.spring.digitalwallet.dao.UserRepository;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
-import com.project.spring.digitalwallet.model.User;
-import com.project.spring.digitalwallet.service.UserService;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Service
@@ -50,7 +44,7 @@ public class UserService  {
     public User addUser(User user) {
        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
        user.setPassword(encoder.encode(user.getPassword()));
-       user.setRole(Role.User);
+       user.setRole(Role.USER);
        return userRepo.save(user);
     }
 

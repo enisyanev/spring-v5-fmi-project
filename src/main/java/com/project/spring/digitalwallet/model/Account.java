@@ -1,4 +1,4 @@
-package com.project.spring.digitalwallet.model.transaction;
+package com.project.spring.digitalwallet.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,26 +11,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TRANSACTION")
+@Table(name = "ACCOUNT")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Transaction {
+@AllArgsConstructor
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long slipId;
     private Long walletId;
-    private Long accountId;
-    private String direction;
-    private Type type;
     private String currency;
-    private BigDecimal amount;
-    private LocalDateTime createdTime = LocalDateTime.now();
-    private Status status;
+    private BigDecimal balance;
+    private AccountStatus status;
+
 }

@@ -1,13 +1,12 @@
 package com.project.spring.digitalwallet.dao;
 
-import java.util.Optional;
-
+import com.project.spring.digitalwallet.model.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.spring.digitalwallet.model.Wallet;
+import java.util.Optional;
 
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
-    Optional<Wallet> findById(Long id);
+    Optional<Wallet> findByName(String name);
 }

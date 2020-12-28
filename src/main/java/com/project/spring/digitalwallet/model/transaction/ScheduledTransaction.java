@@ -1,8 +1,6 @@
 package com.project.spring.digitalwallet.model.transaction;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -11,26 +9,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TRANSACTION")
+@Table(name = "SCHEDULED_TRNS")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Transaction {
+public class ScheduledTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String walletName;
     private Long slipId;
-    private Long walletId;
-    private Long accountId;
-    private Direction direction;
-    private Type type;
     private String currency;
     private BigDecimal amount;
-    private LocalDateTime createdTime = LocalDateTime.now();
-    private TransactionStatus status;
+
+    public ScheduledTransaction() {
+        // non-args constructor
+    }
+
+    public ScheduledTransaction(String walletName, Long slipId, String currency, BigDecimal amount) {
+        this.walletName = walletName;
+        this.slipId = slipId;
+        this.currency = currency;
+        this.amount = amount;
+    }
+
 }

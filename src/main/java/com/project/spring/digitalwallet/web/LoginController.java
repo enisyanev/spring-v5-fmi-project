@@ -10,17 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
-import com.project.spring.digitalwallet.model.Credentials;
-import com.project.spring.digitalwallet.model.Role;
-import com.project.spring.digitalwallet.model.User;
+import com.project.spring.digitalwallet.model.user.Credentials;
+import com.project.spring.digitalwallet.model.user.User;
 import com.project.spring.digitalwallet.service.UserService;
 import com.project.spring.digitalwallet.utils.JwtUtils;
 
 import javax.validation.Valid;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @RestController

@@ -12,14 +12,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
-import com.project.spring.digitalwallet.model.Role;
+import com.project.spring.digitalwallet.model.user.Role;
 import com.project.spring.digitalwallet.service.UserService;
-import com.project.spring.digitalwallet.web.FilterChainExceptionHandlerFilter;
-import com.project.spring.digitalwallet.web.JwtAuthenticationEntryPoint;
-import com.project.spring.digitalwallet.web.JwtAuthenticationFilter;
+import com.project.spring.digitalwallet.web.jwt.FilterChainExceptionHandlerFilter;
+import com.project.spring.digitalwallet.web.jwt.JwtAuthenticationEntryPoint;
+import com.project.spring.digitalwallet.web.jwt.JwtAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpMethod.DELETE;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

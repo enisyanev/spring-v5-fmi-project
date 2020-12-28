@@ -1,4 +1,4 @@
-package com.project.spring.digitalwallet.web;
+package com.project.spring.digitalwallet.web.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.project.spring.digitalwallet.model.User;
+import com.project.spring.digitalwallet.model.user.User;
 import com.project.spring.digitalwallet.service.UserService;
 import com.project.spring.digitalwallet.utils.JwtUtils;
 

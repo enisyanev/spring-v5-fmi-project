@@ -1,7 +1,7 @@
 package com.project.spring.digitalwallet.web;
 
-import javax.validation.Valid;
-
+import com.project.spring.digitalwallet.model.Wallet;
+import com.project.spring.digitalwallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.spring.digitalwallet.model.user.User;
-import com.project.spring.digitalwallet.model.Wallet;
-import com.project.spring.digitalwallet.service.WalletService;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/wallets")
@@ -28,7 +26,6 @@ public class WalletController {
 
 	@PostMapping
 	public Wallet createWallet(@Valid @RequestBody Wallet wallet) {
-        Wallet created = walletService.addWallet(wallet);
-        return created;
+        return walletService.addWallet(wallet);
     } 
 }

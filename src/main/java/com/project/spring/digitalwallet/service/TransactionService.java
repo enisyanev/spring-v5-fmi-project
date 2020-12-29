@@ -1,20 +1,30 @@
 package com.project.spring.digitalwallet.service;
 
+import com.project.spring.digitalwallet.dao.SlipRepository;
 import com.project.spring.digitalwallet.dao.TransactionRepository;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
+import com.project.spring.digitalwallet.model.transaction.Direction;
+import com.project.spring.digitalwallet.model.transaction.Slip;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TransactionService {
 
     private TransactionRepository transactionRepository;
+    private AccountService accountService;
+    private SlipRepository slipRepository;
 
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, AccountService accountService,
+                              SlipRepository slipRepository) {
         this.transactionRepository = transactionRepository;
+        this.accountService = accountService;
+        this.slipRepository = slipRepository;
     }
 
     public Transaction getById(Long id) {
@@ -22,22 +32,30 @@ public class TransactionService {
                 new NonexistingEntityException(String.format("Transaction with ID:%s does not exist.", id)));
     }
 
-    @Transactional
-    public void createTransactions(List<Transaction> transactions) {
-        // pass the two transactions here
-        // lock the accounts
-        // insert the transactions
-        // not sure if we want the insertion of the both transactions should be in one DB tranasction or we can insert it in separate transactions (maybe the second one)
+    public List<Transaction> createTransactions(List<Transaction> transactions) {
+        List<Transaction> created = new ArrayList<>();
         Long slipId = generateSlipId();
-        transactions.forEach(x -> x.setSlipId(slipId));
-        transactionRepository.saveAll(transactions);
-        // TODO: update the account balances
-        // TODO: FEES??
+        for (Transaction transaction : transactions) {
+            BigDecimal amount = transaction.getAmount();
+            if (transaction.getDirection() == Direction.W) {
+                amount = amount.negate();
+            }
+            created.add(storeTransaction(transaction, slipId, amount));
+        }
+
+        return created;
     }
 
-    // How to generate the Slip ID?
     private Long generateSlipId() {
-        return 1L;
+        return slipRepository.save(new Slip()).getId();
+    }
+
+    @Transactional
+    public Transaction storeTransaction(Transaction transaction, Long slipId, BigDecimal amount) {
+        transaction.setSlipId(slipId);
+        Transaction trn = transactionRepository.save(transaction);
+        accountService.updateBalance(transaction.getAccountId(), amount);
+        return trn;
     }
 
 }

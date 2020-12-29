@@ -32,8 +32,7 @@ public class UserService  {
         return userRepo.findById(id).orElseThrow(() ->
             new NonexistingEntityException(String.format("User with ID:%s does not exist.", id)));
     }
-
-    
+   
     public User getUserByUsername(String username) {
         return userRepo.findByUsername(username).orElseThrow(() ->
                 new InvalidEntityDataException("Invalid username or password."));

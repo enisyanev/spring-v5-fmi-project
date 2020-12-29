@@ -13,13 +13,12 @@ import com.project.spring.digitalwallet.model.transaction.Transaction;
 import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
 import com.project.spring.digitalwallet.model.transaction.Type;
 import com.project.spring.digitalwallet.model.user.User;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SendMoneyService {
@@ -50,24 +49,26 @@ public class SendMoneyService {
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(buildTransaction(sender, Direction.W, request.getCurrency(),
-                request.getAmount(), recipient == null ? TransactionStatus.SCHEDULED : TransactionStatus.PROCESSED));
+            request.getAmount(),
+            recipient == null ? TransactionStatus.SCHEDULED : TransactionStatus.PROCESSED));
         if (recipient != null) {
             transactions.add(buildTransaction(recipient, Direction.D, recipient.getCurrency(),
-                    request.getAmount(), TransactionStatus.PROCESSED));
+                request.getAmount(), TransactionStatus.PROCESSED));
         }
 
         List<Transaction> created = transactionService.createTransactions(transactions);
 
         Transaction senderTransaction = created.stream()
-                .filter(x -> x.getWalletId().equals(sender.getWalletId()) && x.getType() == Type.SEND_MONEY)
-                .findFirst().get();
+            .filter(
+                x -> x.getWalletId().equals(sender.getWalletId()) && x.getType() == Type.SEND_MONEY)
+            .findFirst().get();
 
         if (recipient == null) {
             handleScheduled(senderTransaction, request.getWalletName(), request);
         }
 
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
-                senderTransaction.getAccountId(), senderTransaction.getStatus());
+            senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
 
     private Account loadAccount(Long accountId, Long walletId) {
@@ -75,7 +76,8 @@ public class SendMoneyService {
 
         if (account == null) {
             throw new NonexistingEntityException(
-                    String.format("Account with ID:%s does not exist for wallet id: %s.", accountId, walletId));
+                String.format("Account with ID:%s does not exist for wallet id: %s.", accountId,
+                    walletId));
         }
 
         return account;
@@ -91,18 +93,20 @@ public class SendMoneyService {
         try {
             WalletDto walletDto = walletService.getWalletDto(walletName);
 
-            // Send money to the account with matching currency, if there is no such one fallback to the default account
+            // Send money to the account with matching currency,
+            // if there is no such one fallback to the default account
             return walletDto.getAccounts().stream()
-                    .filter(x -> x.getCurrency().equals(currency))
-                    .findFirst()
-                    .orElse(walletDto.getDefaultAccount());
+                .filter(x -> x.getCurrency().equals(currency))
+                .findFirst()
+                .orElse(walletDto.getDefaultAccount());
         } catch (NonexistingEntityException e) {
             // Send money to non-registered
             return null;
         }
     }
 
-    private Transaction buildTransaction(Account account, Direction direction, String currency, BigDecimal amount,
+    private Transaction buildTransaction(Account account, Direction direction, String currency,
+                                         BigDecimal amount,
                                          TransactionStatus status) {
         Transaction transaction = new Transaction();
         transaction.setWalletId(account.getWalletId());
@@ -116,8 +120,10 @@ public class SendMoneyService {
         return transaction;
     }
 
-    private void handleScheduled(Transaction senderTransaction, String walletName, SendMoneyRequest request) {
-        scheduledTransactionRepository.save(new ScheduledTransaction(walletName, senderTransaction.getSlipId(),
+    private void handleScheduled(Transaction senderTransaction, String walletName,
+                                 SendMoneyRequest request) {
+        scheduledTransactionRepository
+            .save(new ScheduledTransaction(walletName, senderTransaction.getSlipId(),
                 request.getCurrency(), request.getAmount()));
 
         // TODO: Send email ?

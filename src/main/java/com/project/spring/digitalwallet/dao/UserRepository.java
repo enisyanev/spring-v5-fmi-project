@@ -9,6 +9,7 @@ import com.project.spring.digitalwallet.model.user.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByUsername(String username);
-	User deleteByUsername(String username);
+    Optional<User> findByUsername(String username);
+
+    User deleteByUsername(String username);
 }

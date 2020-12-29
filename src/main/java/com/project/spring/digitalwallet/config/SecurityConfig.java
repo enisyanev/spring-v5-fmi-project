@@ -1,6 +1,14 @@
 package com.project.spring.digitalwallet.config;
 
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+
+import com.project.spring.digitalwallet.model.user.Role;
+import com.project.spring.digitalwallet.service.UserService;
+import com.project.spring.digitalwallet.web.jwt.FilterChainExceptionHandlerFilter;
+import com.project.spring.digitalwallet.web.jwt.JwtAuthenticationEntryPoint;
+import com.project.spring.digitalwallet.web.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,14 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-
-import com.project.spring.digitalwallet.model.user.Role;
-import com.project.spring.digitalwallet.service.UserService;
-import com.project.spring.digitalwallet.web.jwt.FilterChainExceptionHandlerFilter;
-import com.project.spring.digitalwallet.web.jwt.JwtAuthenticationEntryPoint;
-import com.project.spring.digitalwallet.web.jwt.JwtAuthenticationFilter;
-
-import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -34,12 +34,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-                .antMatchers(POST,"/api/login", "/api/register").permitAll()
-                .antMatchers(GET,"/api/users/**").hasAnyRole(Role.ADMIN.toString())
-                .antMatchers(POST, "/api/send-money").hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
-                //.antMatchers(POST, "/api/wallets").hasAnyRole(Role.ADMIN.toString(),Role.USER.toString())
-                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .antMatchers(POST, "/api/login", "/api/register").permitAll()
+            .antMatchers(GET, "/api/users/**").hasAnyRole(Role.ADMIN.toString())
+            .antMatchers(POST, "/api/send-money")
+            .hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
+            //.antMatchers(POST, "/api/wallets").hasAnyRole(Role.ADMIN.toString(),Role.USER.toString())
+            .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(filterChainExceptionHandlerFilter, LogoutFilter.class);

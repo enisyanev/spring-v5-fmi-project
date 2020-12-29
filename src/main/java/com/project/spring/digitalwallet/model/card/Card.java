@@ -3,6 +3,8 @@ package com.project.spring.digitalwallet.model.card;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +31,7 @@ public class Card {
     @NotNull
     private String cardNumber;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private CardType cardType;
     @NotNull
     private long walletId;

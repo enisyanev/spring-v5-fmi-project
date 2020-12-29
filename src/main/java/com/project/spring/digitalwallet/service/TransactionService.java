@@ -53,9 +53,8 @@ public class TransactionService {
     @Transactional
     public Transaction storeTransaction(Transaction transaction, Long slipId, BigDecimal amount) {
         transaction.setSlipId(slipId);
-        Transaction trn = transactionRepository.save(transaction);
         accountService.updateBalance(transaction.getAccountId(), amount);
-        return trn;
+        return transactionRepository.save(transaction);
     }
 
 }

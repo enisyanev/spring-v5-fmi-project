@@ -4,10 +4,9 @@ import com.project.spring.digitalwallet.dao.AccountRepository;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.Account;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
@@ -20,8 +19,9 @@ public class AccountService {
 
     public Account getById(Long accountId) {
         return accountRepository.findById(accountId)
-                .orElseThrow(() -> new NonexistingEntityException(String.format("Account with ID:%s does not exist.",
-                        accountId)));
+            .orElseThrow(() -> new NonexistingEntityException(
+                String.format("Account with ID:%s does not exist.",
+                    accountId)));
     }
 
     public Account getByIdAndWalletId(Long accountId, Long walletId) {

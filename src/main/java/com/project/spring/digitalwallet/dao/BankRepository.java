@@ -9,5 +9,5 @@ import com.project.spring.digitalwallet.model.Bank;
 
 @Repository
 public interface BankRepository extends JpaRepository<Bank, Long> {
-	List<Bank> findByWalletId(long walletId);
+    List<Bank> findByWalletId(long walletId);
 }

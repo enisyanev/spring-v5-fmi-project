@@ -4,6 +4,7 @@ import java.util.List;
 
 public class InvalidEntityDataException extends RuntimeException {
     private List<String> violations;
+
     public InvalidEntityDataException() {
     }
 

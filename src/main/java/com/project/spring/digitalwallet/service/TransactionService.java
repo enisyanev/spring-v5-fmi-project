@@ -6,12 +6,11 @@ import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Slip;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionService {
@@ -20,7 +19,8 @@ public class TransactionService {
     private AccountService accountService;
     private SlipRepository slipRepository;
 
-    public TransactionService(TransactionRepository transactionRepository, AccountService accountService,
+    public TransactionService(TransactionRepository transactionRepository,
+                              AccountService accountService,
                               SlipRepository slipRepository) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
@@ -29,7 +29,8 @@ public class TransactionService {
 
     public Transaction getById(Long id) {
         return transactionRepository.findById(id).orElseThrow(() ->
-                new NonexistingEntityException(String.format("Transaction with ID:%s does not exist.", id)));
+            new NonexistingEntityException(
+                String.format("Transaction with ID:%s does not exist.", id)));
     }
 
     public List<Transaction> createTransactions(List<Transaction> transactions) {

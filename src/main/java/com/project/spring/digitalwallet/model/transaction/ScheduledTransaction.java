@@ -1,14 +1,13 @@
 package com.project.spring.digitalwallet.model.transaction;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "SCHEDULED_TRNS")
@@ -28,7 +27,8 @@ public class ScheduledTransaction {
         // non-args constructor
     }
 
-    public ScheduledTransaction(String walletName, Long slipId, String currency, BigDecimal amount) {
+    public ScheduledTransaction(String walletName, Long slipId, String currency,
+                                BigDecimal amount) {
         this.walletName = walletName;
         this.slipId = slipId;
         this.currency = currency;

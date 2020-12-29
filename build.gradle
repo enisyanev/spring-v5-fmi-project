@@ -35,9 +35,21 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
- 
+
 }
 
 test {
     useJUnitPlatform()
+}
+
+apply plugin: 'checkstyle'
+checkstyle {
+	toolVersion '8.38'
+	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+checkstyleMain {
+	source = 'src/main/java'
+}
+checkstyleTest {
+	source = 'src/test/java'
 }

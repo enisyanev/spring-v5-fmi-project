@@ -1,6 +1,14 @@
 package com.project.spring.digitalwallet.web.jwt;
 
+import com.project.spring.digitalwallet.model.user.User;
+import com.project.spring.digitalwallet.service.UserService;
+import com.project.spring.digitalwallet.utils.JwtUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -11,16 +19,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.project.spring.digitalwallet.model.user.User;
-import com.project.spring.digitalwallet.service.UserService;
-import com.project.spring.digitalwallet.utils.JwtUtils;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
+/**
+ * Filter for JWT authentication.
+ */
 @Component
 @Slf4j
 @Order
@@ -31,11 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
-        if(authorizationHeader != null) {
+        if (authorizationHeader != null) {
             if (authorizationHeader.startsWith("Bearer ")) {
                 jwtToken = authorizationHeader.substring(7);
                 try {
@@ -52,14 +54,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new BadCredentialsException("WT token does not begin with 'Bearer ' prefix.");
             }
         }
-        if(username != null) {
+        if (username != null) {
             User user = userService.getUserByUsername(username);
             System.out.println(user.getAuthorities());
-            if(jwtUtils.validateToken(jwtToken, user)) {
+            if (jwtUtils.validateToken(jwtToken, user)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 System.out.println(user.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authenticationToken
+                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }

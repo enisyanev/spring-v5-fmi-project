@@ -1,14 +1,13 @@
 package com.project.spring.digitalwallet.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,8 +27,8 @@ public class ErrorResponse {
         this.violations = violations;
     }
 
-	public ErrorResponse(int code, String message) {
-		this.code = code;
+    public ErrorResponse(int code, String message) {
+        this.code = code;
         this.message = message;
-	}
+    }
 }

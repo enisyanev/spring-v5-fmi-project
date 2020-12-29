@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,10 +29,13 @@ public class Transaction {
     private Long slipId;
     private Long walletId;
     private Long accountId;
+    @Enumerated(EnumType.STRING)
     private Direction direction;
+    @Enumerated(EnumType.STRING)
     private Type type;
     private String currency;
     private BigDecimal amount;
     private LocalDateTime createdTime = LocalDateTime.now();
+    @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 }

@@ -39,8 +39,6 @@ public class UserService  {
                 new InvalidEntityDataException("Invalid username or password."));
     }
 
-
-
     public User addUser(User user) {
        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
        user.setPassword(encoder.encode(user.getPassword()));

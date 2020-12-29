@@ -13,30 +13,37 @@ import com.project.spring.digitalwallet.model.transaction.Transaction;
 import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
 import com.project.spring.digitalwallet.model.transaction.Type;
 import com.project.spring.digitalwallet.model.user.User;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class SendMoneyService {
 
     private WalletService walletService;
     private AccountService accountService;
     private TransactionService transactionService;
     private ScheduledTransactionRepository scheduledTransactionRepository;
+    private UserService userService;
 
     public SendMoneyService(WalletService walletService, AccountService accountService,
                             TransactionService transactionService,
-                            ScheduledTransactionRepository scheduledTransactionRepository) {
+                            ScheduledTransactionRepository scheduledTransactionRepository,
+                            UserService userService) {
         this.walletService = walletService;
         this.accountService = accountService;
         this.transactionService = transactionService;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
+        this.userService = userService;
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
-        User senderPrincipal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User senderPrincipal = userService.getUserByUsername(authentication.getName());
         Account sender = loadAccount(request.getAccountId(), senderPrincipal.getWalletId());
         validate(sender, request);
         Account recipient = loadRecipient(request.getWalletName(), request.getCurrency());

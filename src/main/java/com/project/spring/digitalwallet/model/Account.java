@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class Account {
     private Long walletId;
     private String currency;
     private BigDecimal balance;
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
 }

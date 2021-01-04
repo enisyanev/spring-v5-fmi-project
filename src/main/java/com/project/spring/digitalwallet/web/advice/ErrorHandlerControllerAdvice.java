@@ -1,6 +1,6 @@
 package com.project.spring.digitalwallet.web.advice;
 
-
+import com.project.spring.digitalwallet.exception.ApiCommunicationException;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.ErrorResponse;
@@ -12,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@ControllerAdvice(basePackageClasses = ErrorHandlerControllerAdvice.class)
+@ControllerAdvice
 public class ErrorHandlerControllerAdvice {
 
     @ExceptionHandler
@@ -39,6 +39,13 @@ public class ErrorHandlerControllerAdvice {
     public ResponseEntity<ErrorResponse> handleAuthenticationException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleApiCommunicationException(
+        ApiCommunicationException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
     }
 
 }

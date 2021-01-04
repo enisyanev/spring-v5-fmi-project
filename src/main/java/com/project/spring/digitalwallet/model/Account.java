@@ -1,6 +1,7 @@
 package com.project.spring.digitalwallet.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,5 +30,9 @@ public class Account {
     private BigDecimal balance;
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
+
+    public BigDecimal getBalance() {
+        return balance.setScale(2, RoundingMode.DOWN);
+    }
 
 }

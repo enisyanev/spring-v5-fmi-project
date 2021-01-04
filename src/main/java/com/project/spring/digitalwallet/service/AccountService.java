@@ -25,7 +25,10 @@ public class AccountService {
     }
 
     public Account getByIdAndWalletId(Long accountId, Long walletId) {
-        return accountRepository.findByIdAndWalletId(accountId, walletId);
+        return accountRepository.findByIdAndWalletId(accountId, walletId)
+            .orElseThrow(() -> new NonexistingEntityException(
+                String.format("Account with ID:%s for wallet with ID:%s does not exist.",
+                    accountId, walletId)));
     }
 
     public List<Account> getByWalletId(Long walletId) {

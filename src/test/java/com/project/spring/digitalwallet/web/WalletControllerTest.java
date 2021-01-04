@@ -1,5 +1,9 @@
 package com.project.spring.digitalwallet.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.service.WalletService;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,10 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class WalletControllerTest {
 

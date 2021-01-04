@@ -43,7 +43,9 @@ public class SendMoneyService {
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User senderPrincipal = userService.getUserByUsername(authentication.getName());
-        Account sender = loadAccount(request.getAccountId(), senderPrincipal.getWalletId());
+        Account sender =
+            accountService
+                .getByIdAndWalletId(request.getAccountId(), senderPrincipal.getWalletId());
         validate(sender, request);
         Account recipient = loadRecipient(request.getWalletName(), request.getCurrency());
 
@@ -69,18 +71,6 @@ public class SendMoneyService {
 
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
             senderTransaction.getAccountId(), senderTransaction.getStatus());
-    }
-
-    private Account loadAccount(Long accountId, Long walletId) {
-        Account account = accountService.getByIdAndWalletId(accountId, walletId);
-
-        if (account == null) {
-            throw new NonexistingEntityException(
-                String.format("Account with ID:%s does not exist for wallet id: %s.", accountId,
-                    walletId));
-        }
-
-        return account;
     }
 
     private void validate(Account account, SendMoneyRequest request) {

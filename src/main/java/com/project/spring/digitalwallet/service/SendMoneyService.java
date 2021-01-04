@@ -14,6 +14,7 @@ import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
 import com.project.spring.digitalwallet.model.transaction.Type;
 import com.project.spring.digitalwallet.model.user.User;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.core.Authentication;
@@ -28,16 +29,18 @@ public class SendMoneyService {
     private TransactionService transactionService;
     private ScheduledTransactionRepository scheduledTransactionRepository;
     private UserService userService;
+    private FxRatesService fxRatesService;
 
     public SendMoneyService(WalletService walletService, AccountService accountService,
                             TransactionService transactionService,
                             ScheduledTransactionRepository scheduledTransactionRepository,
-                            UserService userService) {
+                            UserService userService, FxRatesService fxRatesService) {
         this.walletService = walletService;
         this.accountService = accountService;
         this.transactionService = transactionService;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.userService = userService;
+        this.fxRatesService = fxRatesService;
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
@@ -46,16 +49,23 @@ public class SendMoneyService {
         Account sender =
             accountService
                 .getByIdAndWalletId(request.getAccountId(), senderPrincipal.getWalletId());
-        validate(sender, request);
+        BigDecimal senderAmount = fxRatesService
+            .getConvertedAmount(sender.getCurrency(), request.getCurrency(), request.getAmount())
+            .setScale(2, RoundingMode.UP);
+
+        validate(sender, senderAmount);
         Account recipient = loadRecipient(request.getWalletName(), request.getCurrency());
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(buildTransaction(sender, Direction.W, request.getCurrency(),
-            request.getAmount(),
+            senderAmount,
             recipient == null ? TransactionStatus.SCHEDULED : TransactionStatus.PROCESSED));
         if (recipient != null) {
+            BigDecimal recipientAmount = fxRatesService
+                .getConvertedAmount(request.getCurrency(), recipient.getCurrency(),
+                    request.getAmount());
             transactions.add(buildTransaction(recipient, Direction.D, recipient.getCurrency(),
-                request.getAmount(), TransactionStatus.PROCESSED));
+                recipientAmount, TransactionStatus.PROCESSED));
         }
 
         List<Transaction> created = transactionService.createTransactions(transactions);
@@ -73,8 +83,8 @@ public class SendMoneyService {
             senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
 
-    private void validate(Account account, SendMoneyRequest request) {
-        if (account.getBalance().compareTo(request.getAmount()) < 0) {
+    private void validate(Account account, BigDecimal amount) {
+        if (account.getBalance().compareTo(amount) < 0) {
             throw new InvalidEntityDataException("Insufficient balance!");
         }
     }
@@ -104,7 +114,7 @@ public class SendMoneyService {
         transaction.setDirection(direction);
         transaction.setType(Type.SEND_MONEY);
         transaction.setCurrency(currency);
-        transaction.setAmount(amount);
+        transaction.setAmount(amount.setScale(2, RoundingMode.UP));
         transaction.setStatus(status);
 
         return transaction;

@@ -1,16 +1,24 @@
 package com.project.spring.digitalwallet.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.project.spring.digitalwallet.dao.SlipRepository;
 import com.project.spring.digitalwallet.dao.TransactionRepository;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Slip;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.project.spring.digitalwallet.model.user.User;
 
 @Service
 public class TransactionService {
@@ -18,13 +26,15 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     private AccountService accountService;
     private SlipRepository slipRepository;
+    private UserService userService;
 
     public TransactionService(TransactionRepository transactionRepository,
                               AccountService accountService,
-                              SlipRepository slipRepository) {
+                              SlipRepository slipRepository, UserService userService) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
         this.slipRepository = slipRepository;
+        this.userService = userService;
     }
 
     public Transaction getById(Long id) {
@@ -56,6 +66,13 @@ public class TransactionService {
         transaction.setSlipId(slipId);
         accountService.updateBalance(transaction.getAccountId(), amount);
         return transactionRepository.save(transaction);
+    }
+    
+    public Page<Transaction> getTransactionsHistory(int pageNo, int pageSize) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByUsername(authentication.getName());
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return transactionRepository.findByWalletId(user.getWalletId(), pageable);
     }
 
 }

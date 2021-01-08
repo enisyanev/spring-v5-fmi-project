@@ -1,0 +1,33 @@
+package com.project.spring.digitalwallet.web;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.project.spring.digitalwallet.dto.transaction.TransactionDto;
+import com.project.spring.digitalwallet.model.transaction.Transaction;
+import com.project.spring.digitalwallet.service.TransactionService;
+
+@RestController
+@RequestMapping("/api/transactions-history")
+public class TransactionController {
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @GetMapping
+    public List<TransactionDto> getTransactionsHistory(@RequestParam(name = "pageNo") int pageNo,
+            @RequestParam(defaultValue = "20") int pageSize) {
+        Page<Transaction> result = transactionService.getTransactionsHistory(pageNo, pageSize);
+        List<Transaction> transactionHistory = result.getContent();
+        return transactionHistory.stream().map(t -> new TransactionDto(t.getId(), t.getAmount(), t.getCreatedTime(),
+                t.getAccountId(), t.getDirection(), t.getCurrency())).collect(Collectors.toList());
+    }
+
+}

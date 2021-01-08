@@ -24,10 +24,7 @@ public class TransactionController {
     @GetMapping
     public List<TransactionDto> getTransactionsHistory(@RequestParam(name = "pageNo") int pageNo,
             @RequestParam(defaultValue = "20") int pageSize) {
-        Page<Transaction> result = transactionService.getTransactionsHistory(pageNo, pageSize);
-        List<Transaction> transactionHistory = result.getContent();
-        return transactionHistory.stream().map(t -> new TransactionDto(t.getId(), t.getAmount(), t.getCreatedTime(),
-                t.getAccountId(), t.getDirection(), t.getCurrency())).collect(Collectors.toList());
+        return transactionService.getTransactionsHistory(pageNo, pageSize);
     }
 
 }

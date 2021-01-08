@@ -36,7 +36,7 @@ public class TransactionDto {
         // TODO finish this
         BigDecimal amount = this.amount;
         String directionString = "added to";
-        if (direction == Direction.D) {
+        if (direction == Direction.W) {
             amount = amount.negate();
             directionString = "substracted from";
 

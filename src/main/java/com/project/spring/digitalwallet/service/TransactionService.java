@@ -3,6 +3,7 @@ package com.project.spring.digitalwallet.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.project.spring.digitalwallet.dao.SlipRepository;
 import com.project.spring.digitalwallet.dao.TransactionRepository;
+import com.project.spring.digitalwallet.dto.transaction.TransactionDto;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Slip;
@@ -68,11 +70,14 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
     
-    public Page<Transaction> getTransactionsHistory(int pageNo, int pageSize) {
+    public List<TransactionDto> getTransactionsHistory(int pageNo, int pageSize) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getUserByUsername(authentication.getName());
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return transactionRepository.findByWalletId(user.getWalletId(), pageable);
+        List<Transaction> transactionHistory = transactionRepository.findByWalletId(user.getWalletId(), pageable)
+                .getContent();
+        return transactionHistory.stream().map(t -> new TransactionDto(t.getId(), t.getAmount(), t.getCreatedTime(),
+                t.getAccountId(), t.getDirection(), t.getCurrency())).collect(Collectors.toList());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.project.spring.digitalwallet.service;
 
 import com.project.spring.digitalwallet.dao.CardRepository;
+import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.card.Card;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ public class CardService {
 
     public List<Card> getCardsByWalletId(long walletdId) {
         return cardRepository.findByWalletId(walletdId);
+    }
+
+    public Card getByIdAndWalletId(long id, long walletId) {
+        return cardRepository.findByIdAndWalletId(id, walletId)
+            .orElseThrow(() -> new NonexistingEntityException(
+                String.format("Card with ID:%s for wallet %s does not exist.", id, walletId)));
     }
 
     public void deactivateCard(Card card) {

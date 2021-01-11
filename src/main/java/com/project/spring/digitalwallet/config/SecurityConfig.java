@@ -22,8 +22,13 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String[] ALL_ROLES =
+        new String[] {Role.ADMIN.toString(), Role.USER.toString()};
+
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -40,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
             .antMatchers("/api/transactions-history")
             .hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
+            .antMatchers(POST, "/api/send-money").hasAnyRole(ALL_ROLES)
+            .antMatchers(POST, "/api/upload").hasAnyRole(ALL_ROLES)
             //.antMatchers(POST, "/api/wallets").hasAnyRole(Role.ADMIN.toString(),Role.USER.toString())
             .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

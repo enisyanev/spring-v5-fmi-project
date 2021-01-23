@@ -1,14 +1,20 @@
 package com.project.spring.digitalwallet.service;
 
+import com.project.spring.digitalwallet.dao.SlipRepository;
+import com.project.spring.digitalwallet.dao.TransactionRepository;
+import com.project.spring.digitalwallet.dto.transaction.TransactionDto;
+import com.project.spring.digitalwallet.exception.NonexistingEntityException;
+import com.project.spring.digitalwallet.model.transaction.Direction;
+import com.project.spring.digitalwallet.model.transaction.Slip;
+import com.project.spring.digitalwallet.model.transaction.Transaction;
+import com.project.spring.digitalwallet.model.user.User;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -18,15 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
-
-import com.project.spring.digitalwallet.dao.SlipRepository;
-import com.project.spring.digitalwallet.dao.TransactionRepository;
-import com.project.spring.digitalwallet.dto.transaction.TransactionDto;
-import com.project.spring.digitalwallet.exception.NonexistingEntityException;
-import com.project.spring.digitalwallet.model.transaction.Direction;
-import com.project.spring.digitalwallet.model.transaction.Slip;
-import com.project.spring.digitalwallet.model.transaction.Transaction;
-import com.project.spring.digitalwallet.model.user.User;
 
 @Service
 public class TransactionService {
@@ -79,22 +76,22 @@ public class TransactionService {
         accountService.updateBalance(transaction.getAccountId(), amount);
         return transactionRepository.save(transaction);
     }
-    
+
     public List<TransactionDto> getTransactionsHistory(int pageNo, int pageSize) {
         User user = getLoggedUser();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        List<Transaction> transactionHistory = transactionRepository.findByWalletId(user.getWalletId(), pageable)
-                .getContent();
+        List<Transaction> transactionHistory =
+            transactionRepository.findByWalletId(user.getWalletId(), pageable).getContent();
         return convertTransactionsToDto(transactionHistory);
     }
-    
+
     public List<TransactionDto> getTransactionsHistory() {
         User user = getLoggedUser();
         List<Transaction> transactionHistory = transactionRepository.findByWalletId(user.getWalletId());
         return convertTransactionsToDto(transactionHistory);
     }
-    
-    public void downloadTransactionsHistoryAsCSV(HttpServletResponse response) throws IOException {
+
+    public void downloadTransactionsHistoryAsCsv(HttpServletResponse response) throws IOException {
         response.setContentType(CSV_CONTENT_TYPE);
         String headerValue = CSV_HEADER_VALUE + TRANSACTION_HISTORY_CSV_FILE_NAME;
         response.setHeader(CSV_HEADER_KEY, headerValue);
@@ -111,14 +108,15 @@ public class TransactionService {
         }
         writer.close();
     }
-    
+
     private User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userService.getUserByUsername(authentication.getName());
     }
 
     private List<TransactionDto> convertTransactionsToDto(List<Transaction> transactionsHistory) {
-        return transactionsHistory.stream().map(t -> new TransactionDto(t.getId(), t.getAmount(), t.getCreatedTime(),
+        return transactionsHistory.stream()
+            .map(t -> new TransactionDto(t.getId(), t.getAmount(), t.getCreatedTime(),
                 t.getAccountId(), t.getDirection(), t.getCurrency())).collect(Collectors.toList());
     }
 

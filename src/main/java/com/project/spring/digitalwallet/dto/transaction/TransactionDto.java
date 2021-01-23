@@ -1,10 +1,8 @@
 package com.project.spring.digitalwallet.dto.transaction;
 
+import com.project.spring.digitalwallet.model.transaction.Direction;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import com.project.spring.digitalwallet.model.transaction.Direction;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,13 +20,12 @@ public class TransactionDto {
     private Long accountId;
 
     public TransactionDto(Long id, BigDecimal amount, LocalDateTime createdTime, Long accountId, Direction direction,
-            String currency) {
+                          String currency) {
         this.id = id;
         this.amount = amount;
         this.currency = currency;
         this.createdTime = createdTime;
         this.accountId = accountId;
-        this.currency = currency;
         this.description = buildDescription(direction);
     }
 
@@ -42,8 +39,8 @@ public class TransactionDto {
 
         }
         StringBuilder builder = new StringBuilder();
-        builder.append("Transaction ").append(id.longValue()).append(": ").append(amount + " ").append(currency + " ")
-                .append("were " + directionString + " ").append("account").append(accountId);
+        builder.append("Transaction ").append(id.longValue()).append(": ").append(amount + " ")
+            .append(currency + " ").append("were " + directionString + " ").append("account").append(accountId);
         return builder.toString();
 
     }

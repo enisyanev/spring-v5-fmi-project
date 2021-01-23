@@ -81,15 +81,13 @@ public class TransactionService {
         User user = getLoggedUser();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         List<Transaction> transactionHistory =
-            transactionRepository.findByWalletId(user.getWalletId(), pageable)
-                .getContent();
+            transactionRepository.findByWalletId(user.getWalletId(), pageable).getContent();
         return convertTransactionsToDto(transactionHistory);
     }
 
     public List<TransactionDto> getTransactionsHistory() {
         User user = getLoggedUser();
-        List<Transaction> transactionHistory =
-            transactionRepository.findByWalletId(user.getWalletId());
+        List<Transaction> transactionHistory = transactionRepository.findByWalletId(user.getWalletId());
         return convertTransactionsToDto(transactionHistory);
     }
 

@@ -19,8 +19,7 @@ public class TransactionDto {
     private String description;
     private Long accountId;
 
-    public TransactionDto(Long id, BigDecimal amount, LocalDateTime createdTime, Long accountId,
-                          Direction direction,
+    public TransactionDto(Long id, BigDecimal amount, LocalDateTime createdTime, Long accountId, Direction direction,
                           String currency) {
         this.id = id;
         this.amount = amount;

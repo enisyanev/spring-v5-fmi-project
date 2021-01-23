@@ -21,8 +21,7 @@ public class TransactionController {
 
     @GetMapping
     public List<TransactionDto> getTransactionsHistory(@RequestParam(name = "pageNo") int pageNo,
-                                                       @RequestParam(defaultValue = "20")
-                                                           int pageSize) {
+                                                       @RequestParam(defaultValue = "20") int pageSize) {
         return transactionService.getTransactionsHistory(pageNo, pageSize);
     }
 

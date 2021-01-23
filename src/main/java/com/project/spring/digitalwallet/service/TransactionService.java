@@ -97,12 +97,9 @@ public class TransactionService {
         response.setContentType(CSV_CONTENT_TYPE);
         String headerValue = CSV_HEADER_VALUE + TRANSACTION_HISTORY_CSV_FILE_NAME;
         response.setHeader(CSV_HEADER_KEY, headerValue);
-        ICsvBeanWriter writer =
-            new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Transaction ID", "From Account ID", "Amount", "Currency",
-            "Created Time", "Description"};
-        String[] nameMapping = {"id", "accountId", "amount", "currency", "createdTime",
-            "description"};
+        ICsvBeanWriter writer = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = {"Transaction ID", "From Account ID", "Amount", "Currency", "Created Time", "Description"};
+        String[] nameMapping = {"id", "accountId", "amount", "currency", "createdTime", "description"};
 
         List<TransactionDto> transactionsHistory = getTransactionsHistory();
         transactionsHistory.sort(Comparator.comparing(TransactionDto::getCreatedTime).reversed());

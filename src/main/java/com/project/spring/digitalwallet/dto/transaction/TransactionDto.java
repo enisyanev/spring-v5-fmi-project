@@ -41,8 +41,7 @@ public class TransactionDto {
         }
         StringBuilder builder = new StringBuilder();
         builder.append("Transaction ").append(id.longValue()).append(": ").append(amount + " ")
-            .append(currency + " ")
-            .append("were " + directionString + " ").append("account").append(accountId);
+            .append(currency + " ").append("were " + directionString + " ").append("account").append(accountId);
         return builder.toString();
 
     }

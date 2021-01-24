@@ -44,11 +44,10 @@ public class SendMoneyService {
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User senderPrincipal = userService.getUserByUsername(authentication.getName());
+        Long walletId = getWalletId(request.getWalletId());
         Account sender =
             accountService
-                .getByIdAndWalletId(request.getAccountId(), senderPrincipal.getWalletId());
+                .getByIdAndWalletId(request.getAccountId(), walletId);
         BigDecimal senderAmount = fxRatesService
             .getConvertedAmount(sender.getCurrency(), request.getCurrency(), request.getAmount())
             .setScale(2, RoundingMode.UP);
@@ -81,6 +80,15 @@ public class SendMoneyService {
 
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
             senderTransaction.getAccountId(), senderTransaction.getStatus());
+    }
+
+    private Long getWalletId(Long walletId) {
+        if (walletId != null) {
+            return walletId;
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User senderPrincipal = userService.getUserByUsername(authentication.getName());
+        return senderPrincipal.getWalletId();
     }
 
     private void validate(Account account, BigDecimal amount) {

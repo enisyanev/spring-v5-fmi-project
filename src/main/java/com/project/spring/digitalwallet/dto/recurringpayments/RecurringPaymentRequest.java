@@ -15,8 +15,6 @@ import lombok.Setter;
 public class RecurringPaymentRequest {
 
     @NotNull
-    private Long customerId;
-    @NotNull
     private Long accountId;
 
     // TODO: Or other identificator of the recipient

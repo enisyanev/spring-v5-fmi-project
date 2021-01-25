@@ -3,11 +3,8 @@ package com.project.spring.digitalwallet.web;
 import com.project.spring.digitalwallet.dto.sendmoney.SendMoneyRequest;
 import com.project.spring.digitalwallet.dto.sendmoney.SendMoneyResponse;
 import com.project.spring.digitalwallet.service.SendMoneyService;
-
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

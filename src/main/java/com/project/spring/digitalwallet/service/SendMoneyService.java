@@ -101,8 +101,8 @@ public class SendMoneyService {
                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-            List<SendMoneyResponse> response= new ArrayList<>();
-            
+            List<SendMoneyResponse> response = new ArrayList<>();
+
             for (CSVRecord csvRecord : csvRecords) {
                 SendMoneyRequest request = new SendMoneyRequest();
                 request.setAccountId(Long.parseLong(csvRecord.get("Account ID")));

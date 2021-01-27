@@ -5,6 +5,10 @@ import com.project.spring.digitalwallet.model.user.Credentials;
 import com.project.spring.digitalwallet.model.user.User;
 import com.project.spring.digitalwallet.service.UserService;
 import com.project.spring.digitalwallet.utils.JwtUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +31,7 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/api/login")
-    public String login(@Valid @RequestBody Credentials credentials, Errors errors) {
+    public Map<String,Object> login(@Valid @RequestBody Credentials credentials, Errors errors) {
         if (errors.hasErrors()) {
             throw new InvalidEntityDataException("Invalid username or password");
         }
@@ -36,8 +40,9 @@ public class LoginController {
         final User user = userService.getUserByUsername(credentials.getUsername());
         final String token = jwtUtils.generateToken(user);
         System.out.println(user.getAuthorities());
-        log.info("Login successfull for {}: {}", user.getUsername(), token); //remove it!
-        return token;
+        Map<String,Object> response=new HashMap<>();
+        response.put("token", token);
+        return response;
     }
 
     @PostMapping("/api/register")

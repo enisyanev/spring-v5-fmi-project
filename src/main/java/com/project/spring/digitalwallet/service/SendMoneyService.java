@@ -4,6 +4,7 @@ import com.project.spring.digitalwallet.dao.ScheduledTransactionRepository;
 import com.project.spring.digitalwallet.dto.sendmoney.SendMoneyRequest;
 import com.project.spring.digitalwallet.dto.sendmoney.SendMoneyResponse;
 import com.project.spring.digitalwallet.dto.wallet.WalletDto;
+import com.project.spring.digitalwallet.exception.FileUploadException;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.Account;
@@ -13,13 +14,21 @@ import com.project.spring.digitalwallet.model.transaction.Transaction;
 import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
 import com.project.spring.digitalwallet.model.transaction.Type;
 import com.project.spring.digitalwallet.model.user.User;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class SendMoneyService {
@@ -81,7 +90,31 @@ public class SendMoneyService {
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
             senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
+  
+    public List<SendMoneyResponse> sendMoneyUsingCsvFile(MultipartFile file) {
+        try (InputStream is = file.getInputStream();
+                BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                CSVParser csvParser = new CSVParser(fileReader,
+                        CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
+            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+            List<SendMoneyResponse> response = new ArrayList<>();
+
+            for (CSVRecord csvRecord : csvRecords) {
+                SendMoneyRequest request = new SendMoneyRequest();
+                request.setAccountId(Long.parseLong(csvRecord.get("Account ID")));
+                request.setAmount(new BigDecimal(csvRecord.get("Amount")));
+                request.setCurrency(csvRecord.get("Currency"));
+                request.setWalletName(csvRecord.get("Wallet Name"));
+                response.add(sendMoney(request));
+            }
+
+            return response;
+        } catch (IOException e) {
+            throw new FileUploadException("Fail to parse CSV file: " + e.getMessage(), e);
+        }
+    }
+  
     private Long getWalletId(Long walletId) {
         if (walletId != null) {
             return walletId;

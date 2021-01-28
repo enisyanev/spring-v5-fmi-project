@@ -5,8 +5,10 @@ import com.project.spring.digitalwallet.dto.wallet.WalletDto;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.Wallet;
+import com.project.spring.digitalwallet.model.user.User;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,19 +16,21 @@ public class WalletService {
 
     private AccountService accountService;
     private WalletRepository walletRepo;
+    private UserService userService;
 
     @Autowired
-    public WalletService(AccountService accountService, WalletRepository walletRepo) {
+    public WalletService(AccountService accountService, WalletRepository walletRepo, UserService userService) {
         this.accountService = accountService;
         this.walletRepo = walletRepo;
+        this.userService = userService;
     }
 
     public Wallet addWallet(Wallet wallet) {
         return walletRepo.save(wallet);
     }
 
-    public Wallet getWalletById(String id) {
-        return walletRepo.findById(Long.parseLong(id, 10)).orElseThrow(() ->
+    public Wallet getWalletById(Long id) {
+        return walletRepo.findById(id).orElseThrow(() ->
             new NonexistingEntityException(String.format("Wallet with ID:%s does not exist.", id)));
     }
 
@@ -38,5 +42,11 @@ public class WalletService {
         List<Account> accounts = accountService.getByWalletId(wallet.getId());
 
         return new WalletDto(wallet, accounts);
+    }
+
+    public Wallet getWallet() {
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        return walletRepo.findById(user.getWalletId()).orElseThrow(() ->
+            new NonexistingEntityException(String.format("Wallet with ID:%s does not exist.", user.getWalletId())));
     }
 }

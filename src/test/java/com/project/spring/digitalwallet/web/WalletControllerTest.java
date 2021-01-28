@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 class WalletControllerTest {
 
-    private static final String ID = "123";
+    private static final Long ID = 123L;
 
     @Mock
     private WalletService walletService;

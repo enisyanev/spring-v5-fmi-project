@@ -52,6 +52,7 @@ public class TransactionService {
                 String.format("Transaction with ID:%s does not exist.", id)));
     }
 
+    @Transactional
     public List<Transaction> createTransactions(List<Transaction> transactions) {
         List<Transaction> created = new ArrayList<>();
         Long slipId = generateSlipId();

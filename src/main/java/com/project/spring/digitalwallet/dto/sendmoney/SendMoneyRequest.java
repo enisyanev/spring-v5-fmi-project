@@ -20,4 +20,6 @@ public class SendMoneyRequest {
     private BigDecimal amount;
     @NotNull
     private Long accountId;
+
+    private Long walletId;
 }

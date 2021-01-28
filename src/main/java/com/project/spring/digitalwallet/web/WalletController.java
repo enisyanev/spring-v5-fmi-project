@@ -19,7 +19,7 @@ public class WalletController {
     private WalletService walletService;
 
     @GetMapping("/{id}")
-    public Wallet getWalletById(@PathVariable("id") String id) {
+    public Wallet getWalletById(@PathVariable("id") Long id) {
         return walletService.getWalletById(id);
     }
 

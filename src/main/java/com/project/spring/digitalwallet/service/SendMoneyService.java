@@ -53,11 +53,10 @@ public class SendMoneyService {
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User senderPrincipal = userService.getUserByUsername(authentication.getName());
+        Long walletId = getWalletId(request.getWalletId());
         Account sender =
             accountService
-                .getByIdAndWalletId(request.getAccountId(), senderPrincipal.getWalletId());
+                .getByIdAndWalletId(request.getAccountId(), walletId);
         BigDecimal senderAmount = fxRatesService
             .getConvertedAmount(sender.getCurrency(), request.getCurrency(), request.getAmount())
             .setScale(2, RoundingMode.UP);
@@ -91,7 +90,7 @@ public class SendMoneyService {
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
             senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
-
+  
     public List<SendMoneyResponse> sendMoneyUsingCsvFile(MultipartFile file) {
         try (InputStream is = file.getInputStream();
                 BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -114,6 +113,15 @@ public class SendMoneyService {
         } catch (IOException e) {
             throw new FileUploadException("Fail to parse CSV file: " + e.getMessage(), e);
         }
+    }
+  
+    private Long getWalletId(Long walletId) {
+        if (walletId != null) {
+            return walletId;
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User senderPrincipal = userService.getUserByUsername(authentication.getName());
+        return senderPrincipal.getWalletId();
     }
 
     private void validate(Account account, BigDecimal amount) {

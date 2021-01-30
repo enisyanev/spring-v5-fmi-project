@@ -1,0 +1,36 @@
+<h2 class="header">Deposit</h2>
+<div *ngIf="!instrumentChosen" class="instruments-container">
+  <button mat-raised-button color="primary" (click)="openCards()" class="instruments">Credit card
+  </button>
+  <button mat-raised-button color="primary" class="instruments">Bank</button>
+</div>
+
+<div *ngIf="cardChosen" class="container">
+  <form [formGroup]="cardForm" (ngSubmit)="addCard()">
+    <div class="form-group">
+      <mat-form-field appearance="fill">
+        <mat-label>Card name</mat-label>
+        <input matInput required formControlName="name">
+        <mat-hint align="start">The name on the card</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Card number</mat-label>
+        <input matInput required formControlName="cardNumber">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Card type</mat-label>
+        <mat-select required formControlName="cardType">
+          <mat-option value="VISA">VISA</mat-option>
+          <mat-option value="MASTERCARD">Mastercard</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="form-button">
+        <button mat-raised-button color="primary" type="submit">Add card
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

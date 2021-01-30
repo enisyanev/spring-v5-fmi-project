@@ -24,6 +24,10 @@ public class AccountService {
                     accountId)));
     }
 
+    public Account createAccount(Account account) {
+        return this.accountRepository.save(account);
+    }
+
     public Account getByIdAndWalletId(Long accountId, Long walletId) {
         return accountRepository.findByIdAndWalletId(accountId, walletId)
             .orElseThrow(() -> new NonexistingEntityException(

@@ -1,5 +1,6 @@
 package com.project.spring.digitalwallet.model.user;
 
+import com.project.spring.digitalwallet.dto.registration.RegistrationDto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,9 +39,19 @@ public class User implements UserDetails {
     private String firstname;
     @NotNull
     private String lastname;
+
     private long walletId;
 
     private Role role;
+
+    public User(RegistrationDto registrationDto, long walletId) {
+        this.username = registrationDto.getEmail();
+        this.password = registrationDto.getPassword();
+        this.email = registrationDto.getEmail();
+        this.firstname = registrationDto.getFirstName();
+        this.lastname = registrationDto.getLastName();
+        this.walletId = walletId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

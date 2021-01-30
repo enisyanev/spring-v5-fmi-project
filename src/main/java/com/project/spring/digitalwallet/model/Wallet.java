@@ -30,4 +30,8 @@ public class Wallet {
 
     @NotNull
     private String name;
+
+    public Wallet(String name) {
+        this.name = name;
+    }
 }

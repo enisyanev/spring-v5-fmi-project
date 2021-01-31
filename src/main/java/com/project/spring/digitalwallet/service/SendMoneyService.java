@@ -14,12 +14,13 @@ import com.project.spring.digitalwallet.model.transaction.ScheduledTransaction;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
 import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
 import com.project.spring.digitalwallet.model.transaction.Type;
-import com.project.spring.digitalwallet.model.user.User;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.project.spring.digitalwallet.model.user.User;
 
 @Service
 public class SendMoneyService {
@@ -55,8 +57,6 @@ public class SendMoneyService {
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
         User user = userService.getUserByUsername(request.getUsername());
-        User receivingUser = userService.getUserByEmail(request.getEmail());
-        Wallet receiverWallet = walletService.getWalletById(receivingUser.getWalletId());
         Long walletId = getWalletId(user.getWalletId());
         Account sender =
             accountService
@@ -66,7 +66,7 @@ public class SendMoneyService {
             .setScale(2, RoundingMode.UP);
 
         validate(sender, senderAmount);
-        Account recipient = loadRecipient(receiverWallet.getName(), request.getCurrency());
+        Account recipient = loadRecipient(request);
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(buildTransaction(sender, Direction.W, request.getCurrency(),
@@ -88,7 +88,7 @@ public class SendMoneyService {
             .findFirst().get();
 
         if (recipient == null) {
-            handleScheduled(senderTransaction, receiverWallet.getName(), request);
+            handleScheduled(senderTransaction, request);
         }
 
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
@@ -134,14 +134,16 @@ public class SendMoneyService {
         }
     }
 
-    private Account loadRecipient(String walletName, String currency) {
+    private Account loadRecipient(SendMoneyRequest request) {
         try {
-            WalletDto walletDto = walletService.getWalletDto(walletName);
+            User receivingUser = userService.getUserByEmail(request.getEmail());
+            Wallet receiverWallet = walletService.getWalletById(receivingUser.getWalletId());
+            WalletDto walletDto = walletService.getWalletDto(receiverWallet.getName());
 
             // Send money to the account with matching currency,
             // if there is no such one fallback to the default account
             return walletDto.getAccounts().stream()
-                .filter(x -> x.getCurrency().equals(currency))
+                .filter(x -> x.getCurrency().equals(request.getCurrency()))
                 .findFirst()
                 .orElse(walletDto.getDefaultAccount());
         } catch (NonexistingEntityException e) {
@@ -165,10 +167,9 @@ public class SendMoneyService {
         return transaction;
     }
 
-    private void handleScheduled(Transaction senderTransaction, String walletName,
-                                 SendMoneyRequest request) {
+    private void handleScheduled(Transaction senderTransaction, SendMoneyRequest request) {
         scheduledTransactionRepository
-            .save(new ScheduledTransaction(walletName, senderTransaction.getSlipId(),
+            .save(new ScheduledTransaction(request.getEmail(), senderTransaction.getSlipId(),
                 request.getCurrency(), request.getAmount()));
 
         // TODO: Send email ?

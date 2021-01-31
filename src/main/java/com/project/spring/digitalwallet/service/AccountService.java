@@ -8,6 +8,7 @@ import com.project.spring.digitalwallet.model.user.User;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,16 +17,16 @@ public class AccountService {
     private AccountRepository accountRepository;
     private UserService userService;
 
-    public AccountService(AccountRepository accountRepository,UserService userService) {
+    public AccountService(AccountRepository accountRepository, UserService userService) {
         this.accountRepository = accountRepository;
-        this.userService=userService;
+        this.userService = userService;
     }
 
     public Account getById(Long accountId) {
         return accountRepository.findById(accountId)
-            .orElseThrow(() -> new NonexistingEntityException(
-                String.format("Account with ID:%s does not exist.",
-                    accountId)));
+                .orElseThrow(() -> new NonexistingEntityException(
+                        String.format("Account with ID:%s does not exist.",
+                                accountId)));
     }
 
     public Account createAccount(Account account) {
@@ -34,22 +35,24 @@ public class AccountService {
 
     public Account getByIdAndWalletId(Long accountId, Long walletId) {
         return accountRepository.findByIdAndWalletId(accountId, walletId)
-            .orElseThrow(() -> new NonexistingEntityException(
-                String.format("Account with ID:%s for wallet with ID:%s does not exist.",
-                    accountId, walletId)));
+                .orElseThrow(() -> new NonexistingEntityException(
+                        String.format("Account with ID:%s for wallet with ID:%s does not exist.",
+                                accountId, walletId)));
     }
 
-    public Account getByCurrencyAndWalletId(String currency,Long walletId) {
-    	return accountRepository.findByCurrencyAndWalletId(currency, walletId)
+    public Account getByCurrencyAndWalletId(String currency, Long walletId) {
+        return accountRepository.findByCurrencyAndWalletId(currency, walletId)
                 .orElseThrow(() -> new NonexistingEntityException(
-                    String.format("Account with Currency:%s for wallet with ID:%s does not exist.",
-                    		currency, walletId)));
+                        String.format("Account with Currency:%s for wallet with ID:%s does not exist.",
+                                currency, walletId)));
     }
+
     public List<Account> getByWalletId(Long walletId) {
         return accountRepository.findByWalletId(walletId);
     }
+
     public List<Account> getByWalletIdUsingUsername(String username) {
-    	User user=userService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
         return accountRepository.findByWalletId(user.getWalletId());
     }
 

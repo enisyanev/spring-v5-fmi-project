@@ -19,25 +19,25 @@ import com.project.spring.digitalwallet.service.GroupService;
 @RequestMapping("/api/group")
 public class GroupController {
 
-	@Autowired
-	private GroupService groupService;
+    @Autowired
+    private GroupService groupService;
 
-	@PostMapping("/create")
-	public void createGroup(@RequestBody Group group) {
-		groupService.createGroup(group);
-	}
+    @PostMapping("/create")
+    public void createGroup(@RequestBody Group group) {
+        groupService.createGroup(group);
+    }
 
-	@PostMapping("/donate")
-	public Map<String, String> donateToGroup(@RequestBody Map<String, String> json, Authentication authentication) {
-		Map<String, String> resp = new HashMap<>();
-		String message = groupService.updateTagetMoneyGroup(json.get("groupName"), Integer.parseInt(json.get("money")),
-				json.get("currency"), authentication.getName());
-		resp.put("message", message);
-		return resp;
-	}
+    @PostMapping("/donate")
+    public Map<String, String> donateToGroup(@RequestBody Map<String, String> json, Authentication authentication) {
+        Map<String, String> resp = new HashMap<>();
+        String message = groupService.updateTagetMoneyGroup(json.get("groupName"), Integer.parseInt(json.get("money")),
+                json.get("currency"), authentication.getName());
+        resp.put("message", message);
+        return resp;
+    }
 
-	@GetMapping
-	public List<Group> getAllGroups() {
-		return groupService.getAllGroups();
-	}
+    @GetMapping
+    public List<Group> getAllGroups() {
+        return groupService.getAllGroups();
+    }
 }

@@ -14,13 +14,13 @@ import com.project.spring.digitalwallet.service.AccountService;
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
-	
-	@Autowired
+
+    @Autowired
     private AccountService accountService;
 
-	@GetMapping
-	public List<Account> getAllGroups(@RequestParam String username){
-		return accountService.getByWalletIdUsingUsername(username);
-	}
+    @GetMapping
+    public List<Account> getAllGroups(@RequestParam String username) {
+        return accountService.getByWalletIdUsingUsername(username);
+    }
 
 }

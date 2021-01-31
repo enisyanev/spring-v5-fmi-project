@@ -4,23 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.spring.digitalwallet.model.group.Group;
-import com.project.spring.digitalwallet.model.user.Credentials;
 import com.project.spring.digitalwallet.service.GroupService;
-import com.project.spring.digitalwallet.service.UserService;
 
 @RestController
 @RequestMapping("/api/group")

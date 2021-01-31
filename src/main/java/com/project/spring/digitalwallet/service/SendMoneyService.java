@@ -54,9 +54,9 @@ public class SendMoneyService {
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
-        User user=userService.getUserByUsername(request.getUsername());
-        User receivingUser=userService.getUserByEmail(request.getEmail());
-        Wallet receiverWallet=walletService.getWalletById(receivingUser.getWalletId());
+        User user = userService.getUserByUsername(request.getUsername());
+        User receivingUser = userService.getUserByEmail(request.getEmail());
+        Wallet receiverWallet = walletService.getWalletById(receivingUser.getWalletId());
         Long walletId = getWalletId(user.getWalletId());
         Account sender =
             accountService
@@ -94,7 +94,7 @@ public class SendMoneyService {
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
             senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
-  
+
     public List<SendMoneyResponse> sendMoneyUsingCsvFile(MultipartFile file) {
         try (InputStream is = file.getInputStream();
                 BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));

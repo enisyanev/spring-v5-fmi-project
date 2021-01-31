@@ -1,9 +1,7 @@
 package com.project.spring.digitalwallet.dao;
 
 import com.project.spring.digitalwallet.model.user.User;
-
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

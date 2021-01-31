@@ -6,6 +6,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GroupService } from '../_services/group.service';
 import { AccountService } from '../_services/account.service';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
     selector: 'donate-group',
@@ -18,7 +19,6 @@ import { AccountService } from '../_services/account.service';
       money: null,
       currency:null
     };
-    isLoggedIn = false;
     groups = [
         {id: 0, groupName: ""},
     ];
@@ -42,6 +42,13 @@ import { AccountService } from '../_services/account.service';
     }
     onSubmit(): void {
         const {  money,currency } = this.form;
+        if(this.currencies.length==1){
+           this.selectedCurrency=this.currencies[0].currency
+        }
+        if(this.groups.length==1){
+            this.selectedGroup=this.groups[0].groupName
+        }
+        console.log(this.selectedCurrency)
         this.groupService.donateGroup(this.selectedGroup,money,this.selectedCurrency).subscribe(res=>{
             this.response=res.message
         })

@@ -17,6 +17,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
+import { SendMoneyComponent } from './sendMoney/send.money.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MatSelectModule } from "@angular/material/select";
     HomeComponent,
     GroupComponent,
     GroupDonateComponent,
-    DepositComponent
+    DepositComponent,
+    SendMoneyComponent
   ],
   imports: [
     BrowserModule,

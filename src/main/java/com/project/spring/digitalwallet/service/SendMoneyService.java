@@ -8,6 +8,7 @@ import com.project.spring.digitalwallet.exception.FileUploadException;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.Account;
+import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.ScheduledTransaction;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
@@ -53,7 +54,10 @@ public class SendMoneyService {
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
-        Long walletId = getWalletId(request.getWalletId());
+        User user = userService.getUserByUsername(request.getUsername());
+        User receivingUser = userService.getUserByEmail(request.getEmail());
+        Wallet receiverWallet = walletService.getWalletById(receivingUser.getWalletId());
+        Long walletId = getWalletId(user.getWalletId());
         Account sender =
             accountService
                 .getByIdAndWalletId(request.getAccountId(), walletId);
@@ -62,7 +66,7 @@ public class SendMoneyService {
             .setScale(2, RoundingMode.UP);
 
         validate(sender, senderAmount);
-        Account recipient = loadRecipient(request.getWalletName(), request.getCurrency());
+        Account recipient = loadRecipient(receiverWallet.getName(), request.getCurrency());
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(buildTransaction(sender, Direction.W, request.getCurrency(),
@@ -84,13 +88,13 @@ public class SendMoneyService {
             .findFirst().get();
 
         if (recipient == null) {
-            handleScheduled(senderTransaction, request.getWalletName(), request);
+            handleScheduled(senderTransaction, receiverWallet.getName(), request);
         }
 
         return new SendMoneyResponse(senderTransaction.getSlipId(), senderTransaction.getWalletId(),
             senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
-  
+
     public List<SendMoneyResponse> sendMoneyUsingCsvFile(MultipartFile file) {
         try (InputStream is = file.getInputStream();
                 BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));

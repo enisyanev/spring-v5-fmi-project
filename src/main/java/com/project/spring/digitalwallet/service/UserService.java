@@ -48,6 +48,11 @@ public class UserService {
         return userRepo.save(user);
     }
 
+    public User getUserByEmail(String email) {
+        return userRepo.findByUsername(email).orElseThrow(() ->
+                new InvalidEntityDataException("Invalid username or password."));
+    }
+
     public User deleteUser(String username) {
         User removed = getUserByUsername(username);
         userRepo.deleteByUsername(username);

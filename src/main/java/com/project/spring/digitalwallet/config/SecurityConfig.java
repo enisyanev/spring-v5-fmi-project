@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(GET, "/api/users/**").hasAnyRole(Role.ADMIN.toString())
             .antMatchers(POST, "/api/send-money/**")
             .hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
+            .antMatchers(POST, "/api/group/**")
+            .hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
             .antMatchers("/api/transactions-history")
             .hasAnyRole(Role.ADMIN.toString(), Role.USER.toString())
             .antMatchers(POST, "/api/send-money").hasAnyRole(ALL_ROLES)

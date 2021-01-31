@@ -8,8 +8,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
-
+import { GroupComponent } from './group/group.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { GroupDonateComponent } from './group-donate/group-donate.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
+    GroupComponent,
+    GroupDonateComponent,
   ],
   imports: [
     BrowserModule,

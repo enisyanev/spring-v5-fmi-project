@@ -4,6 +4,8 @@ import com.project.spring.digitalwallet.dao.AccountRepository;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.Account;
+import com.project.spring.digitalwallet.model.user.User;
+
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,11 @@ import org.springframework.stereotype.Service;
 public class AccountService {
 
     private AccountRepository accountRepository;
+    private UserService userService;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository,UserService userService) {
         this.accountRepository = accountRepository;
+        this.userService=userService;
     }
 
     public Account getById(Long accountId) {
@@ -31,8 +35,18 @@ public class AccountService {
                     accountId, walletId)));
     }
 
+    public Account getByCurrencyAndWalletId(String currency,Long walletId) {
+    	return accountRepository.findByCurrencyAndWalletId(currency, walletId)
+                .orElseThrow(() -> new NonexistingEntityException(
+                    String.format("Account with Currency:%s for wallet with ID:%s does not exist.",
+                    		currency, walletId)));
+    }
     public List<Account> getByWalletId(Long walletId) {
         return accountRepository.findByWalletId(walletId);
+    }
+    public List<Account> getByWalletIdUsingUsername(String username) {
+    	User user=userService.getUserByUsername(username);
+        return accountRepository.findByWalletId(user.getWalletId());
     }
 
     // This won't scale well but we expect 1 user for now :)

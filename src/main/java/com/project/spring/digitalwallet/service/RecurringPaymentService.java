@@ -78,7 +78,7 @@ public class RecurringPaymentService {
         Wallet recipient = walletService.getWalletById(payment.getRecipientId());
 
         SendMoneyRequest request = new SendMoneyRequest();
-        request.setWalletId(payment.getWalletId());
+        //request.setWalletId(payment.getWalletId());
         request.setAccountId(payment.getAccountId());
         request.setAmount(payment.getAmount());
         request.setCurrency(account.getCurrency());

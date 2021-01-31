@@ -13,13 +13,16 @@ public class SendMoneyRequest {
 
     // TODO: Or other identificator of the recipient
     @NotNull
-    private String walletName;
+    private String email;
     @NotNull
     private String currency;
+    @NotNull
+    private String username;
     @NotNull
     private BigDecimal amount;
     @NotNull
     private Long accountId;
 
-    private Long walletId;
+    private String walletName;
+
 }

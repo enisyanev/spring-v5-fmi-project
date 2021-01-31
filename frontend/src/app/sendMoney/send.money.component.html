@@ -6,12 +6,24 @@
         #f="ngForm"
         novalidate
       >
-        <div class="form-group">
-          <label for="group">Group name </label>
-            <select class="form-control" name="group" [(ngModel)]="selectedGroup">
-                <option *ngFor="let c of groups" [ngValue]="c.groupName">{{c.groupName}}</option>
-            </select>
+      <div class="form-group">
+        <label for="email">Receiver Email</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="form.email"
+          required
+          email
+          #email="ngModel"
+        />
+        <div class="alert-danger" *ngIf="email.errors && f.submitted">
+          <div *ngIf="email.errors.required">Email is required</div>
+          <div *ngIf="email.errors.email">
+            Email must be a valid email address
+          </div>
         </div>
+      </div>
         <div class="form-group">
           <label for="money">Money</label>
           <input
@@ -24,14 +36,14 @@
           />
         </div>
         <div class="form-group">
-            <label for="group">Currency</label>
+            <label for="currency">Currency</label>
               <select class="form-control" name="currency" [(ngModel)]="selectedCurrency">
                   <option *ngFor="let c of currencies" [ngValue]="c.currency">{{c.currency}}</option>
               </select>
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block">
-            Donate Group
+            Send Money
           </button>
         </div>
       </form>

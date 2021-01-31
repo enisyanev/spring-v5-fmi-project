@@ -18,7 +18,6 @@ const httpOptions = {
       group: null,
       money: null
     };
-    isLoggedIn = false;
     done=false;
     constructor(private groupService: GroupService,private http: HttpClient) { }
     ngOnInit(): void {

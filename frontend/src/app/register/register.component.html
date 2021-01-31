@@ -12,46 +12,28 @@
       #f="ngForm"
       novalidate
     >
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          class="form-control"
-          name="username"
-          [(ngModel)]="form.username"
-          required
-          minlength="3"
-          maxlength="20"
-          #username="ngModel"
-        />
-        <div class="alert-danger" *ngIf="username.errors && f.submitted">
-          <div *ngIf="username.errors.required">Username is required</div>
-          <div *ngIf="username.errors.minlength">
-            Username must be at least 3 characters
-          </div>
-          <div *ngIf="username.errors.maxlength">
-            Username must be at most 20 characters
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="form.password"
-          required
-          minlength="6"
-          #password="ngModel"
-        />
-        <div class="alert-danger" *ngIf="password.errors && f.submitted">
-          <div *ngIf="password.errors.required">Password is required</div>
-          <div *ngIf="password.errors.minlength">
-            Password must be at least 6 characters
-          </div>
-        </div>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label for="username">Username</label>-->
+<!--        <input-->
+<!--          type="text"-->
+<!--          class="form-control"-->
+<!--          name="username"-->
+<!--          [(ngModel)]="form.email"-->
+<!--          required-->
+<!--          minlength="3"-->
+<!--          maxlength="20"-->
+<!--          #username="ngModel"-->
+<!--        />-->
+<!--        <div class="alert-danger" *ngIf="username.errors && f.submitted">-->
+<!--          <div *ngIf="username.errors.required">Username is required</div>-->
+<!--          <div *ngIf="username.errors.minlength">-->
+<!--            Username must be at least 3 characters-->
+<!--          </div>-->
+<!--          <div *ngIf="username.errors.maxlength">-->
+<!--            Username must be at most 20 characters-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="form-group">
         <label for="email">Email</label>
         <input
@@ -70,13 +52,33 @@
           </div>
         </div>
       </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          minlength="6"
+          #password="ngModel"
+        />
+        <div class="alert-danger" *ngIf="password.errors && f.submitted">
+          <div *ngIf="password.errors.required">Password is required</div>
+          <div *ngIf="password.errors.minlength">
+            Password must be at least 6 characters
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="firstname">First Name</label>
         <input
           type="text"
           class="form-control"
           name="firstname"
-          [(ngModel)]="form.firstname"
+          [(ngModel)]="form.firstName"
           required
           #firstname="ngModel"
         />
@@ -87,20 +89,9 @@
           type="text"
           class="form-control"
           name="lastname"
-          [(ngModel)]="form.lastname"
+          [(ngModel)]="form.lastName"
           required
           #lastname="ngModel"
-        />
-      </div>
-      <div class="form-group">
-        <label for="walletId">Wallet id</label>
-        <input
-          type="number"
-          class="form-control"
-          name="walletId"
-          [(ngModel)]="form.walletId"
-          required
-          #walletId="ngModel"
         />
       </div>
       <div class="form-group">

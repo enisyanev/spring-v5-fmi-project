@@ -1,0 +1,25 @@
+.mat-form-field {
+  display: block;
+}
+
+.form-group {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+}
+
+.instruments-container {
+  width: 100%;
+}
+
+.instruments {
+  margin-left: 300px;
+}
+
+.form-button {
+  display: flex;
+  justify-content: flex-end;
+}

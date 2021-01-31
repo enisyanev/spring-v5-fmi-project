@@ -9,5 +9,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findByWalletId(Long walletId);
 
+    Optional<Account> findByCurrencyAndWalletId(String currency, Long walletId);
+
     Optional<Account> findByIdAndWalletId(Long accountId, Long walletId);
 }

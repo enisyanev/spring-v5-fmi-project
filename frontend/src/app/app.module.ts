@@ -8,14 +8,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
-
+import { GroupComponent } from './group/group.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { GroupDonateComponent } from './group-donate/group-donate.component';
 import { DepositComponent } from './deposit/deposit.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule} from "@angular/material/button";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatSelectModule} from "@angular/material/select";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -23,6 +24,8 @@ import {MatSelectModule} from "@angular/material/select";
     LoginComponent,
     RegisterComponent,
     HomeComponent,
+    GroupComponent,
+    GroupDonateComponent,
     DepositComponent
   ],
   imports: [

@@ -95,9 +95,9 @@ public class RecurringPaymentService {
 
         Long walletId = walletService.getWallet().getId();
         RecurringPayment payment = recurringPaymentsRepository.findByIdAndWalletId(id, walletId)
-            .orElseThrow(() -> new NonexistingEntityException(
-                String.format("Recurring payment with ID:%s for wallet with ID:%s does not exist.",
-                    id, walletId)));
+                .orElseThrow(() -> new NonexistingEntityException(
+                        String.format("Recurring payment with ID:%s for wallet with ID:%s does not exist.",
+                                id, walletId)));
 
         payment.setActive(request.getActive());
         payment.setAmount(request.getAmount());

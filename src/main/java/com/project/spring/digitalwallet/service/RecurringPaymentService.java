@@ -3,6 +3,7 @@ package com.project.spring.digitalwallet.service;
 import com.project.spring.digitalwallet.dao.RecurringPaymentsRepository;
 import com.project.spring.digitalwallet.dto.recurringpayments.RecurringPaymentRequest;
 import com.project.spring.digitalwallet.dto.recurringpayments.RecurringPaymentResponse;
+import com.project.spring.digitalwallet.dto.recurringpayments.RecurringPeriod;
 import com.project.spring.digitalwallet.dto.recurringpayments.UpdateRecurringPaymentRequest;
 import com.project.spring.digitalwallet.dto.sendmoney.SendMoneyRequest;
 import com.project.spring.digitalwallet.dto.wallet.WalletDto;
@@ -71,10 +72,25 @@ public class RecurringPaymentService {
 
     public void executeRecurringPayments() {
         List<RecurringPayment> paymentsToExecute = recurringPaymentsRepository.findAllForExecution();
-        paymentsToExecute.forEach(this::executePayment);
+        List<RecurringPayment> forExecution = findAllForExecution();
+        for (int i = 0; i < forExecution.size(); i++) {
+            RecurringPayment payment = forExecution.get(i);
+            executePayment(payment);
+            if (payment.getPeriod() == RecurringPeriod.DAILY) {
+                payment.setLastExecutionTime(payment.getNextExecutionTime());
+                payment.setNextExecutionTime(payment.getNextExecutionTime().plusDays(1));
+            } else if (payment.getPeriod() == RecurringPeriod.WEEKLY) {
+                payment.setLastExecutionTime(payment.getNextExecutionTime());
+                payment.setNextExecutionTime(payment.getNextExecutionTime().plusWeeks(1));
+            } else {
+                payment.setLastExecutionTime(payment.getNextExecutionTime());
+                payment.setNextExecutionTime(payment.getNextExecutionTime().plusMonths(1));
+            }
+            savePayment(payment);
+        }
     }
 
-    private void executePayment(RecurringPayment payment) {
+    public void executePayment(RecurringPayment payment) {
         SendMoneyRequest request = buildSendMoneyRequest(payment);
 
         sendMoneyService.sendMoney(request);
@@ -85,13 +101,17 @@ public class RecurringPaymentService {
         recurringPaymentsRepository.save(payment);
     }
 
+    public void savePayment(RecurringPayment payment) {
+        recurringPaymentsRepository.save(payment);
+    }
+
     private SendMoneyRequest buildSendMoneyRequest(RecurringPayment payment) {
         Account account = accountService.getById(payment.getAccountId());
         Wallet recipient = walletService.getWalletById(payment.getRecipientId());
 
         SendMoneyRequest request = new SendMoneyRequest();
         request.setEmail(payment.getRecipient());
-        request.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        request.setUsername(userService.getUserByWalletId(payment.getWalletId()).getUsername());
         request.setAccountId(payment.getAccountId());
         request.setAmount(payment.getAmount());
         request.setCurrency(account.getCurrency());
@@ -101,15 +121,25 @@ public class RecurringPaymentService {
 
     public List<RecurringPaymentResponse> getRecurringPayments() {
         List<RecurringPaymentResponse> response = new ArrayList<>();
-        List<RecurringPayment> payments = recurringPaymentsRepository.findAllByWalletId(walletService.getWallet().getId());
+        List<RecurringPayment> payments = recurringPaymentsRepository.
+                findAllByWalletId(walletService.getWallet().getId());
         for (int i = 0; i < payments.size(); i++) {
             RecurringPayment payment = payments.get(i);
             if (payment.getActive()) {
-                RecurringPaymentResponse singleResponse = new RecurringPaymentResponse(payment.getRecipient(), payment.getAmount(), payment.getLastExecutionTime(), payment.getNextExecutionTime(), payment.getPeriod());
+                RecurringPaymentResponse singleResponse =
+                        new RecurringPaymentResponse(payment.getRecipient(),
+                                payment.getAmount(),
+                                payment.getLastExecutionTime(),
+                                payment.getNextExecutionTime(),
+                                payment.getPeriod());
                 response.add(singleResponse);
             }
         }
         return response;
+    }
+
+    public List<RecurringPayment> findAllForExecution() {
+        return recurringPaymentsRepository.findAllForExecution();
     }
 
     public void updateRecurringPayment(Long id, UpdateRecurringPaymentRequest request) {

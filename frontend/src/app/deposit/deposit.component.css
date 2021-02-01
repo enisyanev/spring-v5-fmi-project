@@ -61,3 +61,7 @@
   background-color: #ebeced;
   transition: 1s;
 }
+
+.successful-message {
+  text-align: center;
+}

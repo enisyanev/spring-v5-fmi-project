@@ -11,7 +11,7 @@
       Deposit money with Credit card
     </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card (click)="openBanks()">
     <mat-card-header>
       <mat-card-title>Bank</mat-card-title>
     </mat-card-header>
@@ -26,7 +26,7 @@
 
 <div *ngIf="showCards">
   <div>
-    <h2 *ngIf="showCards" class="header">Choose credit card</h2>
+    <h2 class="header">Choose credit card</h2>
   </div>
   <div>
     <table mat-table [dataSource]="cards" class="mat-elevation-z8">
@@ -59,7 +59,7 @@
 
 <div *ngIf="openAddCard" class="add-cc-container">
   <div>
-    <h2 *ngIf="openAddCard" class="header">Add credit card</h2>
+    <h2 class="header">Add credit card</h2>
   </div>
   <div>
     <form [formGroup]="cardForm" (ngSubmit)="addCard()">
@@ -88,6 +88,81 @@
             Back
           </button>
           <button mat-raised-button class="options-button" color="primary" type="submit">Add card
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="showBanks">
+  <div>
+    <h2 class="header">Choose bank account</h2>
+  </div>
+  <div>
+    <table mat-table [dataSource]="banks" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="iban">
+        <th mat-header-cell *matHeaderCellDef> Iban</th>
+        <td mat-cell *matCellDef="let element"> {{element.iban}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="swift">
+        <th mat-header-cell *matHeaderCellDef> Swift</th>
+        <td mat-cell *matCellDef="let element"> {{element.swift}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef> Country</th>
+        <td mat-cell *matCellDef="let element"> {{element.country}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="bankDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: bankDisplayedColumns;"
+          (click)="openDeposit(row.id, 'BANK_ACCOUNT')"></tr>
+    </table>
+
+    <div class="form-button">
+      <button mat-raised-button class="options-button" color="primary" (click)="backToOptions()">
+        Back
+      </button>
+      <button mat-raised-button class="options-button" color="primary" (click)="openAddBanks()">Add
+        bank account
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="openAddBank" class="add-cc-container">
+  <div>
+    <h2 class="header">Add bank account</h2>
+  </div>
+  <div>
+    <form [formGroup]="bankForm" (ngSubmit)="addBank()">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Iban</mat-label>
+          <input matInput required formControlName="iban">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Swift</mat-label>
+          <input matInput required formControlName="swift">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Country</mat-label>
+          <mat-select required formControlName="country">
+            <mat-option value="BUL">Bulgaria</mat-option>
+            <mat-option value="GRE">Greece</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-raised-button class="options-button" color="primary" (click)="backToBanks()">
+            Back
+          </button>
+          <button mat-raised-button class="options-button" color="primary" type="submit">Add bank account
           </button>
         </div>
       </div>

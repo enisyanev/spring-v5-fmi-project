@@ -1,36 +1,146 @@
-<h2 class="header">Deposit</h2>
+<h2 *ngIf="!instrumentChosen" class="header">Deposit options</h2>
 <div *ngIf="!instrumentChosen" class="instruments-container">
-  <button mat-raised-button color="primary" (click)="openCards()" class="instruments">Credit card
-  </button>
-  <button mat-raised-button color="primary" class="instruments">Bank</button>
+  <mat-card (click)="openCards()">
+    <mat-card-header>
+      <mat-card-title>Credit Card</mat-card-title>
+    </mat-card-header>
+    <span class="material-icons">
+      credit_card
+    </span>
+    <mat-card-content>
+      Deposit money with Credit card
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Bank</mat-card-title>
+    </mat-card-header>
+    <span class="material-icons">
+      account_balance
+    </span>
+    <mat-card-content>
+      Deposit money with Bank account
+    </mat-card-content>
+  </mat-card>
 </div>
 
-<div *ngIf="cardChosen" class="container">
-  <form [formGroup]="cardForm" (ngSubmit)="addCard()">
-    <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Card name</mat-label>
-        <input matInput required formControlName="name">
-        <mat-hint align="start">The name on the card</mat-hint>
-      </mat-form-field>
+<div *ngIf="showCards">
+  <div>
+    <h2 *ngIf="showCards" class="header">Choose credit card</h2>
+  </div>
+  <div>
+    <table mat-table [dataSource]="cards" class="mat-elevation-z8">
 
-      <mat-form-field appearance="fill">
-        <mat-label>Card number</mat-label>
-        <input matInput required formControlName="cardNumber">
-      </mat-form-field>
+      <ng-container matColumnDef="cardType">
+        <th mat-header-cell *matHeaderCellDef> Card Type</th>
+        <td mat-cell *matCellDef="let element"> {{element.cardType}} </td>
+      </ng-container>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Card type</mat-label>
-        <mat-select required formControlName="cardType">
-          <mat-option value="VISA">VISA</mat-option>
-          <mat-option value="MASTERCARD">Mastercard</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <ng-container matColumnDef="cardNumber">
+        <th mat-header-cell *matHeaderCellDef> Card Number</th>
+        <td mat-cell *matCellDef="let element"> {{element.cardNumber}} </td>
+      </ng-container>
 
-      <div class="form-button">
-        <button mat-raised-button color="primary" type="submit">Add card
-        </button>
-      </div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="openDeposit(row.id, 'CARD')"></tr>
+    </table>
+
+    <div class="form-button">
+      <button mat-raised-button class="options-button" color="primary" (click)="backToOptions()">
+        Back
+      </button>
+      <button mat-raised-button class="options-button" color="primary" (click)="openAddCards()">Add
+        card
+      </button>
     </div>
-  </form>
+  </div>
+</div>
+
+<div *ngIf="openAddCard" class="add-cc-container">
+  <div>
+    <h2 *ngIf="openAddCard" class="header">Add credit card</h2>
+  </div>
+  <div>
+    <form [formGroup]="cardForm" (ngSubmit)="addCard()">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Card name</mat-label>
+          <input matInput required formControlName="name">
+          <mat-hint align="start">The name on the card</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Card number</mat-label>
+          <input matInput required formControlName="cardNumber">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Card type</mat-label>
+          <mat-select required formControlName="cardType">
+            <mat-option value="VISA">VISA</mat-option>
+            <mat-option value="MASTERCARD">Mastercard</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-raised-button class="options-button" color="primary" (click)="backToCards()">
+            Back
+          </button>
+          <button mat-raised-button class="options-button" color="primary" type="submit">Add card
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="makeDeposit">
+  <div>
+    <h2 class="header">Make a deposit</h2>
+  </div>
+  <div>
+    <form [formGroup]="depositForm" (ngSubmit)="doDeposit()">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Account</mat-label>
+          <mat-select required formControlName="accountId">
+            <mat-option *ngFor="let account of accounts"
+                        [value]="account.id">{{account.currency}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" required formControlName="amount">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Currency</mat-label>
+          <mat-select required formControlName="currency">
+            <mat-option value="EUR">Euro</mat-option>
+            <mat-option value="BGN">Bulgarian Lev</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-raised-button class="options-button" color="primary" (click)="backToCards()">
+            Back
+          </button>
+          <button mat-raised-button class="options-button" color="primary" type="submit">Deposit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="showSuccessMessage" class="successful-message">
+  <h2>Successful deposit!!</h2>
+  <button mat-raised-button color="primary" (click)="goToHomePage()" class="successful-options">
+    Home
+  </button>
+  <button mat-raised-button color="primary" (click)="makeAnotherDeposit()"
+          class="successful-options">Make another deposit
+  </button>
 </div>

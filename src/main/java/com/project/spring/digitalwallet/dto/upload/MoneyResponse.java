@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadResponse {
+public class MoneyResponse {
 
     private Long accountId;
     private TransactionStatus status;

@@ -1,0 +1,221 @@
+<h2 *ngIf="!instrumentChosen" class="header">Withdraw options</h2>
+<div *ngIf="!instrumentChosen" class="instruments-container">
+  <mat-card (click)="openCards()">
+    <mat-card-header>
+      <mat-card-title>Credit Card</mat-card-title>
+    </mat-card-header>
+    <span class="material-icons">
+      credit_card
+    </span>
+    <mat-card-content>
+      Withdraw money with Credit card
+    </mat-card-content>
+  </mat-card>
+  <mat-card (click)="openBanks()">
+    <mat-card-header>
+      <mat-card-title>Bank</mat-card-title>
+    </mat-card-header>
+    <span class="material-icons">
+      account_balance
+    </span>
+    <mat-card-content>
+      Withdraw money with Bank account
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="showCards">
+  <div>
+    <h2 class="header">Choose credit card</h2>
+  </div>
+  <div>
+    <table mat-table [dataSource]="cards" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="cardType">
+        <th mat-header-cell *matHeaderCellDef> Card Type</th>
+        <td mat-cell *matCellDef="let element"> {{element.cardType}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cardNumber">
+        <th mat-header-cell *matHeaderCellDef> Card Number</th>
+        <td mat-cell *matCellDef="let element"> {{element.cardNumber}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="openWithdraw(row.id, 'CARD')"></tr>
+    </table>
+
+    <div class="form-button">
+      <button mat-raised-button class="options-button" color="primary" (click)="backToOptions()">
+        Back
+      </button>
+      <button mat-raised-button class="options-button" color="primary" (click)="openAddCards()">Add
+        card
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="openAddCard" class="add-cc-container">
+  <div>
+    <h2 class="header">Add credit card</h2>
+  </div>
+  <div>
+    <form [formGroup]="cardForm" (ngSubmit)="addCard()">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Card name</mat-label>
+          <input matInput required formControlName="name">
+          <mat-hint align="start">The name on the card</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Card number</mat-label>
+          <input matInput required formControlName="cardNumber">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Card type</mat-label>
+          <mat-select required formControlName="cardType">
+            <mat-option value="VISA">VISA</mat-option>
+            <mat-option value="MASTERCARD">Mastercard</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-raised-button class="options-button" color="primary" (click)="backToCards()">
+            Back
+          </button>
+          <button mat-raised-button class="options-button" color="primary" type="submit">Add card
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="showBanks">
+  <div>
+    <h2 class="header">Choose bank account</h2>
+  </div>
+  <div>
+    <table mat-table [dataSource]="banks" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="iban">
+        <th mat-header-cell *matHeaderCellDef> Iban</th>
+        <td mat-cell *matCellDef="let element"> {{element.iban}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="swift">
+        <th mat-header-cell *matHeaderCellDef> Swift</th>
+        <td mat-cell *matCellDef="let element"> {{element.swift}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef> Country</th>
+        <td mat-cell *matCellDef="let element"> {{element.country}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="bankDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: bankDisplayedColumns;"
+          (click)="openWithdraw(row.id, 'BANK_ACCOUNT')"></tr>
+    </table>
+
+    <div class="form-button">
+      <button mat-raised-button class="options-button" color="primary" (click)="backToOptions()">
+        Back
+      </button>
+      <button mat-raised-button class="options-button" color="primary" (click)="openAddBanks()">Add
+        bank account
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="openAddBank" class="add-cc-container">
+  <div>
+    <h2 class="header">Add bank account</h2>
+  </div>
+  <div>
+    <form [formGroup]="bankForm" (ngSubmit)="addBank()">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Iban</mat-label>
+          <input matInput required formControlName="iban">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Swift</mat-label>
+          <input matInput required formControlName="swift">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Country</mat-label>
+          <mat-select required formControlName="country">
+            <mat-option value="BUL">Bulgaria</mat-option>
+            <mat-option value="GRE">Greece</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-raised-button class="options-button" color="primary" (click)="backToBanks()">
+            Back
+          </button>
+          <button mat-raised-button class="options-button" color="primary" type="submit">Add bank account
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="makeWithdraw">
+  <div>
+    <h2 class="header">Withdraw money</h2>
+  </div>
+  <div>
+    <form [formGroup]="withdrawForm" (ngSubmit)="doWithdraw()">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Account</mat-label>
+          <mat-select required formControlName="accountId">
+            <mat-option *ngFor="let account of accounts"
+                        [value]="account.id">{{account.currency}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" required formControlName="amount">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Currency</mat-label>
+          <mat-select required formControlName="currency">
+            <mat-option value="EUR">Euro</mat-option>
+            <mat-option value="BGN">Bulgarian Lev</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-raised-button class="options-button" color="primary" (click)="backToCards()">
+            Back
+          </button>
+          <button mat-raised-button class="options-button" color="primary" type="submit">Withdraw
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="showSuccessMessage" class="successful-message">
+  <h2>Successful withdraw!</h2>
+  <button mat-raised-button color="primary" (click)="goToHomePage()" class="successful-options">
+    Home
+  </button>
+  <button mat-raised-button color="primary" (click)="makeAnotherWithdraw()"
+          class="successful-options">Make another withdraw
+  </button>
+</div>

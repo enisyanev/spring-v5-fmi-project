@@ -12,9 +12,9 @@ import { DatePipe } from '@angular/common';
   }) 
   export class ReccuringComponent implements OnInit {
     form: any = {
-      group: null,
-      money: null,
-      currency:null
+      email: null,
+      amount: null,
+      period:null
     };
     pipe = new DatePipe('en-US');
     reccurings = [
@@ -22,7 +22,16 @@ import { DatePipe } from '@angular/common';
     ];
     displayedColumns: string[] = ['receiver', 'amount', 'lastExecutionTime', 'nextExecutionTime','period'];
     createRecurring=false;
-    response="";
+    periods=[
+      {name:"DAILY"},
+      {name:"WEEKLY"},
+      {name:"MONTHLY"},
+    ]
+    selectedPeriod=""
+    currencies = [
+      {id: 0, currency: ""},
+    ];
+    selectedCurrency = "";
     constructor(private groupService: GroupService,private changeDetectorRefs: ChangeDetectorRef,private recurringService:RecurringService,private tokenS:TokenStorageService,private accountService:AccountService) { }
     ngOnInit(): void {
        this.recurringService.getAllRecurrings().subscribe(res => {
@@ -30,6 +39,9 @@ import { DatePipe } from '@angular/common';
             this.reccurings=res
             //this.changeDetectorRefs.reattach()
         })
+        this.accountService.getAllAccountByUsername(this.tokenS.getUser()).subscribe(res=>{
+          this.currencies=res
+      })
     }
     openReccuring() {
       this.createRecurring = true;
@@ -38,8 +50,12 @@ import { DatePipe } from '@angular/common';
       this.createRecurring = false;
     }
     onSubmit(): void {
-        const {  money,currency } = this.form;
-        this.createRecurring=true;
+      const {  email,amount } = this.form;
+      let accountId=0
+      for(let i=0; i<this.currencies.length; i++){
+        if(this.currencies[i].currency==this.selectedCurrency)accountId=this.currencies[i].id
+      }
+      this.recurringService.createRecurring(accountId,amount,email,this.selectedPeriod)
     }
       
 }

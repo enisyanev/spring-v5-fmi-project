@@ -1,14 +1,12 @@
 package com.project.spring.digitalwallet.dto.recurringpayments;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -17,16 +15,11 @@ public class RecurringPaymentRequest {
 
     @NotNull
     private Long accountId;
-    @NotNull
-    private String username;
     @NotBlank
     private String email;
     @NotNull
     private BigDecimal amount;
     @NotNull
     private RecurringPeriod period;
-    @NotNull
-    @FutureOrPresent
-    private LocalDate startDate;
 
 }

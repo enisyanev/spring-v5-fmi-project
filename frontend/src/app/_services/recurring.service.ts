@@ -14,4 +14,14 @@ export class RecurringService {
   public getAllRecurrings():Observable<any>{
     return this.http.get('http://localhost:8080/api/recurring-payments', httpOptions)
   }
+  public createRecurring(accountId:number,amount:number,email:string,period:string):void{
+    this.http.post('http://localhost:8080/api/recurring-payments', {
+        "accountId":accountId,
+        "amount":amount,
+        "email":email,
+        "period":period
+      }, httpOptions).subscribe(res => {
+        console.log(res)
+    });  
+  }
 }

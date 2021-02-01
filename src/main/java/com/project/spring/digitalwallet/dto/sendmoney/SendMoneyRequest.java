@@ -2,6 +2,7 @@ package com.project.spring.digitalwallet.dto.sendmoney;
 
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SendMoneyRequest {
 
-    // TODO: Or other identificator of the recipient
     @NotNull
     private String email;
     @NotNull
@@ -24,5 +24,7 @@ public class SendMoneyRequest {
     private Long accountId;
 
     private String walletName;
+
+    private Long walletId;
 
 }

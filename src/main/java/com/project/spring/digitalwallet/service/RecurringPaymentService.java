@@ -13,9 +13,11 @@ import com.project.spring.digitalwallet.model.recurring.RecurringPayment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.project.spring.digitalwallet.model.user.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,8 +48,7 @@ public class RecurringPaymentService {
     }
 
     private WalletDto validate(RecurringPaymentRequest request, Long senderWalletId) {
-        User user=userService.getUserByEmail(request.getEmail());
-        
+        User user = userService.getUserByEmail(request.getEmail());
         accountService.getByIdAndWalletId(request.getAccountId(), senderWalletId);
         Wallet wallet = walletService.getWalletById(user.getWalletId());
         return walletService.getWalletDto(wallet.getName());
@@ -60,7 +61,8 @@ public class RecurringPaymentService {
         recurringPayment.setAccountId(request.getAccountId());
         recurringPayment.setRecipientId(recipient.getWallet().getId());
         recurringPayment.setAmount(request.getAmount());
-        recurringPayment.setNextExecutionTime(request.getStartDate());
+        recurringPayment.setRecipient(request.getEmail());
+        recurringPayment.setNextExecutionTime(LocalDate.now());
         recurringPayment.setPeriod(request.getPeriod());
         recurringPayment.setActive(true);
 
@@ -88,7 +90,8 @@ public class RecurringPaymentService {
         Wallet recipient = walletService.getWalletById(payment.getRecipientId());
 
         SendMoneyRequest request = new SendMoneyRequest();
-        //request.setWalletId(payment.getWalletId());
+        request.setEmail(payment.getRecipient());
+        request.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         request.setAccountId(payment.getAccountId());
         request.setAmount(payment.getAmount());
         request.setCurrency(account.getCurrency());

@@ -15,7 +15,7 @@ export class AccountService {
     return this.http.get('http://localhost:8080/api/account?username='+username, httpOptions)
   }
   public createAccount(username:string,currency:string):void{
-    this.http.post('http://localhost:8080/api/account/create', {
+    this.http.post('http://localhost:8080/api/account', {
             "username":username,
             "currency":currency,
           }, httpOptions).subscribe(res => {

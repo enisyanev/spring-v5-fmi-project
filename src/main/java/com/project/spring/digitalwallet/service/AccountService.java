@@ -1,6 +1,7 @@
 package com.project.spring.digitalwallet.service;
 
 import com.project.spring.digitalwallet.dao.AccountRepository;
+import com.project.spring.digitalwallet.dto.account.AccountRequest;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.Account;
@@ -33,9 +34,9 @@ public class AccountService {
         return this.accountRepository.save(account);
     }
 
-    public void createAccountWithUser(String currency, String username) {
-        User user = userService.getUserByUsername(username);
-        Account acc = new Account(user.getWalletId(), currency);
+    public void createAccountWithUser(AccountRequest account) {
+        User user = userService.getUserByUsername(account.getUsername());
+        Account acc = new Account(user.getWalletId(), account.getCurrency());
         this.accountRepository.save(acc);
     }
 

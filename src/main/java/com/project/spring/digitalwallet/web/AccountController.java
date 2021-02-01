@@ -1,5 +1,6 @@
 package com.project.spring.digitalwallet.web;
 
+import com.project.spring.digitalwallet.dto.account.AccountRequest;
 import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.service.AccountService;
 
@@ -27,9 +28,9 @@ public class AccountController {
         return accountService.getByWalletIdUsingUsername(username);
     }
 
-    @PostMapping("/create")
-    public void accountCreate(@RequestBody Map<String, String> json) {
-        accountService.createAccountWithUser(json.get("currency"), json.get("username"));
+    @PostMapping
+    public void accountCreate(@RequestBody AccountRequest account) {
+        accountService.createAccountWithUser(account);
     }
 
 }

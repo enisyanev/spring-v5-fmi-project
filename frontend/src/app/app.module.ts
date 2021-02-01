@@ -24,6 +24,7 @@ import {MatSortModule} from '@angular/material/sort';
 import { CommonModule } from "@angular/common";
 import { ReccuringComponent } from './reccuring/reccuring.component';
 import {MatCardModule} from "@angular/material/card";
+import { WithdrawComponent } from './withdraw/withdraw.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {MatCardModule} from "@angular/material/card";
     DepositComponent,
     SendMoneyComponent,
     AccountComponent,
-    ReccuringComponent
+    ReccuringComponent,
+    WithdrawComponent
   ],
   imports: [
     CommonModule,

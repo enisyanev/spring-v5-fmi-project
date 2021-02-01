@@ -1,21 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {PaymentInstrumentsService} from "../_services/payment-instruments.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Card} from "../model/Card";
-import {UploadRequest} from "../model/UploadRequest";
-import {TokenStorageService} from "../_services/token-storage.service";
+import {Bank} from "../model/Bank";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AccountService} from "../_services/account.service";
 import {Account} from "../model/Account";
-import {DepositService} from "../_services/deposit.service";
+import {TokenStorageService} from "../_services/token-storage.service";
+import {UploadRequest} from "../model/UploadRequest";
+import {WithdrawService} from "../_services/withdraw.service";
 import {Router} from "@angular/router";
-import {Bank} from "../model/Bank";
 
 @Component({
-  selector: 'app-deposit',
-  templateUrl: './deposit.component.html',
-  styleUrls: ['./deposit.component.css']
+  selector: 'app-withdraw',
+  templateUrl: './withdraw.component.html',
+  styleUrls: ['./withdraw.component.css']
 })
-export class DepositComponent implements OnInit {
+export class WithdrawComponent implements OnInit {
 
   displayedColumns: string[] = ['cardType', 'cardNumber'];
   bankDisplayedColumns: string[] = ['iban', 'swift', 'country'];
@@ -25,12 +25,13 @@ export class DepositComponent implements OnInit {
   showBanks: boolean = false;
   openAddCard: boolean = false;
   openAddBank: boolean = false;
-  makeDeposit: boolean = false;
-  chosenId: number = -1;
-  depositType: string = '';
   cards: Card[] = [];
   banks: Bank[] = [];
   accounts: Account[] = [];
+
+  makeWithdraw: boolean = false;
+  chosenId: number = -1;
+  withdrawType: string = '';
 
   cardForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -44,7 +45,7 @@ export class DepositComponent implements OnInit {
     country: new FormControl('', Validators.required)
   });
 
-  depositForm = new FormGroup({
+  withdrawForm = new FormGroup({
     accountId: new FormControl('', Validators.required),
     amount: new FormControl('', Validators.required),
     currency: new FormControl('', Validators.required)
@@ -53,23 +54,22 @@ export class DepositComponent implements OnInit {
   showSuccessMessage: boolean = false;
 
   constructor(private paymentInstrumentsService: PaymentInstrumentsService,
-              private tokenStorage: TokenStorageService,
               private accountService: AccountService,
-              public depositService: DepositService,
-              public router: Router) {
-  }
+              private tokenStorage: TokenStorageService,
+              private withdrawService: WithdrawService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.instrumentChosen = false;
     this.showCards = false;
     this.showBanks = false;
-    this.openAddCard = false;
-    this.openAddBank = false;
+
     this.paymentInstrumentsService.getPaymentInstruments()
       .subscribe(instruments => {
         this.cards = instruments.cards;
         this.banks = instruments.banks;
       });
+
     this.accountService.getAllAccountByUsername(this.tokenStorage.getUser())
       .subscribe(data => this.accounts = data,
         error => console.log(error));
@@ -85,14 +85,29 @@ export class DepositComponent implements OnInit {
     this.showBanks = true;
   }
 
+  backToOptions() {
+    this.showCards = false;
+    this.showBanks = false;
+    this.instrumentChosen = false;
+  }
+
+  openWithdraw(id: number, withdrawType: string) {
+    this.showCards = false;
+    this.showBanks = false;
+    this.makeWithdraw = true;
+    this.chosenId = id;
+    this.withdrawType = withdrawType;
+  }
+
   openAddCards() {
     this.showCards = false;
     this.openAddCard = true;
   }
 
-  openAddBanks() {
-    this.showBanks = false;
-    this.openAddBank = true;
+  backToCards() {
+    this.openAddCard = false;
+    this.makeWithdraw = false;
+    this.showCards = true;
   }
 
   addCard() {
@@ -115,6 +130,11 @@ export class DepositComponent implements OnInit {
 
   }
 
+  openAddBanks() {
+    this.showBanks = false;
+    this.openAddBank = true;
+  }
+
   addBank() {
     if (!this.bankForm.valid) {
       return;
@@ -134,58 +154,38 @@ export class DepositComponent implements OnInit {
       }, error => console.log(error));
   }
 
-  openDeposit(id: number, depositType: string) {
-    this.showCards = false;
-    this.showBanks = false;
-    this.makeDeposit = true;
-    this.chosenId = id;
-    this.depositType = depositType;
+  backToBanks() {
+    this.openAddBank = false;
+    this.makeWithdraw = false;
+    this.showBanks = true;
   }
 
-  doDeposit() {
-    if (!this.depositForm.valid) {
+  doWithdraw() {
+    if (!this.withdrawForm.valid) {
       return;
     }
 
     const uploadRequest: UploadRequest = {
-      accountId: this.depositForm.get('accountId')?.value,
+      accountId: this.withdrawForm.get('accountId')?.value,
       instrumentId: this.chosenId,
-      amount: this.depositForm.get('amount')?.value,
-      currency: this.depositForm.get('currency')?.value,
-      type: this.depositType
+      amount: this.withdrawForm.get('amount')?.value,
+      currency: this.withdrawForm.get('currency')?.value,
+      type: this.withdrawType
     };
 
-    this.depositService.makeDeposit(uploadRequest).subscribe(
+    this.withdrawService.makeWithdraw(uploadRequest).subscribe(
       () => {
         this.showSuccessMessage = true;
-        this.makeDeposit = false;
-    }, error => console.log(error));
+        this.makeWithdraw = false;
+      }, error => console.log(error));
   }
 
   goToHomePage() {
     this.router.navigate(['/home']);
   }
 
-  makeAnotherDeposit() {
+  makeAnotherWithdraw() {
     this.instrumentChosen = false;
     this.showSuccessMessage = false;
-  }
-
-  backToOptions() {
-    this.showCards = false;
-    this.showBanks = false;
-    this.instrumentChosen = false;
-  }
-
-  backToCards() {
-    this.openAddCard = false;
-    this.makeDeposit = false;
-    this.showCards = true;
-  }
-
-  backToBanks() {
-    this.openAddBank = false;
-    this.makeDeposit = false;
-    this.showBanks = true;
   }
 }

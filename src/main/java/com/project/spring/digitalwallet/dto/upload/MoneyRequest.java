@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UploadRequest {
+public class MoneyRequest {
 
     @NotNull
     private Long accountId;

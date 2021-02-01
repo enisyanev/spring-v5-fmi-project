@@ -1,4 +1,4 @@
-<h2 *ngIf="!instrumentChosen" class="header">Deposit options</h2>
+<h2 *ngIf="!instrumentChosen" class="header">Withdraw options</h2>
 <div *ngIf="!instrumentChosen" class="instruments-container">
   <mat-card (click)="openCards()">
     <mat-card-header>
@@ -8,7 +8,7 @@
       credit_card
     </span>
     <mat-card-content>
-      Deposit money with Credit card
+      Withdraw money with Credit card
     </mat-card-content>
   </mat-card>
   <mat-card (click)="openBanks()">
@@ -19,7 +19,7 @@
       account_balance
     </span>
     <mat-card-content>
-      Deposit money with Bank account
+      Withdraw money with Bank account
     </mat-card-content>
   </mat-card>
 </div>
@@ -43,7 +43,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          (click)="openDeposit(row.id, 'CARD')"></tr>
+          (click)="openWithdraw(row.id, 'CARD')"></tr>
     </table>
 
     <div class="form-button">
@@ -119,7 +119,7 @@
 
       <tr mat-header-row *matHeaderRowDef="bankDisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: bankDisplayedColumns;"
-          (click)="openDeposit(row.id, 'BANK_ACCOUNT')"></tr>
+          (click)="openWithdraw(row.id, 'BANK_ACCOUNT')"></tr>
     </table>
 
     <div class="form-button">
@@ -170,12 +170,12 @@
   </div>
 </div>
 
-<div *ngIf="makeDeposit">
+<div *ngIf="makeWithdraw">
   <div>
-    <h2 class="header">Make a deposit</h2>
+    <h2 class="header">Withdraw money</h2>
   </div>
   <div>
-    <form [formGroup]="depositForm" (ngSubmit)="doDeposit()">
+    <form [formGroup]="withdrawForm" (ngSubmit)="doWithdraw()">
       <div class="form-group">
         <mat-form-field appearance="fill">
           <mat-label>Account</mat-label>
@@ -202,7 +202,7 @@
           <button mat-raised-button class="options-button" color="primary" (click)="backToCards()">
             Back
           </button>
-          <button mat-raised-button class="options-button" color="primary" type="submit">Deposit
+          <button mat-raised-button class="options-button" color="primary" type="submit">Withdraw
           </button>
         </div>
       </div>
@@ -211,11 +211,11 @@
 </div>
 
 <div *ngIf="showSuccessMessage" class="successful-message">
-  <h2>Successful deposit!!</h2>
+  <h2>Successful withdraw!</h2>
   <button mat-raised-button color="primary" (click)="goToHomePage()" class="successful-options">
     Home
   </button>
-  <button mat-raised-button color="primary" (click)="makeAnotherDeposit()"
-          class="successful-options">Make another deposit
+  <button mat-raised-button color="primary" (click)="makeAnotherWithdraw()"
+          class="successful-options">Make another withdraw
   </button>
 </div>

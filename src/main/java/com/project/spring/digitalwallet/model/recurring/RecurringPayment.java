@@ -38,6 +38,9 @@ public class RecurringPayment {
     @Column(name = "RECIPIENT_ID")
     private Long recipientId;
 
+    @Column(name = "RECIPIENT")
+    private String recipient;
+
     @Column(name = "LAST_EXECUTION_TIME")
     private LocalDate lastExecutionTime;
 

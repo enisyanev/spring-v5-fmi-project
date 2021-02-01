@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -19,6 +19,10 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { SendMoneyComponent } from './sendMoney/send.money.component';
 import { AccountComponent } from './account/account.component';
+import { MatTableModule } from "@angular/material/table";
+import {MatSortModule} from '@angular/material/sort';
+import { CommonModule } from "@angular/common";
+import { ReccuringComponent } from './reccuring/reccuring.component';
 
 @NgModule({
   declarations: [
@@ -30,9 +34,11 @@ import { AccountComponent } from './account/account.component';
     GroupDonateComponent,
     DepositComponent,
     SendMoneyComponent,
-    AccountComponent
+    AccountComponent,
+    ReccuringComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
@@ -42,9 +48,11 @@ import { AccountComponent } from './account/account.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [authInterceptorProviders],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

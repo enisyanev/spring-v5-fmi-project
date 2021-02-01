@@ -9,6 +9,7 @@ import { GroupDonateComponent } from './group-donate/group-donate.component';
 import { DepositComponent } from "./deposit/deposit.component";
 import { SendMoneyComponent } from './sendMoney/send.money.component';
 import { AccountComponent } from './account/account.component';
+import { ReccuringComponent } from './reccuring/reccuring.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'deposit', component: DepositComponent },
   { path: 'send-money', component: SendMoneyComponent },
   { path: 'account/create', component: AccountComponent },
+  { path: 'reccuring', component: ReccuringComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

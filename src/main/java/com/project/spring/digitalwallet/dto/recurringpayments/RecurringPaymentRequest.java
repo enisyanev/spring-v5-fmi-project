@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +17,10 @@ public class RecurringPaymentRequest {
 
     @NotNull
     private Long accountId;
-
-    // TODO: Or other identificator of the recipient
+    @NotNull
+    private String username;
     @NotBlank
-    private String walletName;
+    private String email;
     @NotNull
     private BigDecimal amount;
     @NotNull

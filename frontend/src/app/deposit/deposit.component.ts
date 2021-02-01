@@ -8,6 +8,7 @@ import {AccountService} from "../_services/account.service";
 import {Account} from "../model/Account";
 import {DepositService} from "../_services/deposit.service";
 import {Router} from "@angular/router";
+import {Bank} from "../model/Bank";
 
 @Component({
   selector: 'app-deposit',
@@ -17,20 +18,30 @@ import {Router} from "@angular/router";
 export class DepositComponent implements OnInit {
 
   displayedColumns: string[] = ['cardType', 'cardNumber'];
+  bankDisplayedColumns: string[] = ['iban', 'swift', 'country'];
 
   instrumentChosen: boolean = false;
   showCards: boolean = false;
+  showBanks: boolean = false;
   openAddCard: boolean = false;
+  openAddBank: boolean = false;
   makeDeposit: boolean = false;
   chosenId: number = -1;
   depositType: string = '';
   cards: Card[] = [];
+  banks: Bank[] = [];
   accounts: Account[] = [];
 
   cardForm = new FormGroup({
     name: new FormControl('', Validators.required),
     cardNumber: new FormControl('', Validators.required),
     cardType: new FormControl('', Validators.required)
+  });
+
+  bankForm = new FormGroup({
+    iban: new FormControl('', Validators.required),
+    swift: new FormControl('', Validators.required),
+    country: new FormControl('', Validators.required)
   });
 
   depositForm = new FormGroup({
@@ -51,10 +62,13 @@ export class DepositComponent implements OnInit {
   ngOnInit(): void {
     this.instrumentChosen = false;
     this.showCards = false;
+    this.showBanks = false;
     this.openAddCard = false;
+    this.openAddBank = false;
     this.paymentInstrumentsService.getPaymentInstruments()
       .subscribe(instruments => {
-        this.cards = instruments.cards
+        this.cards = instruments.cards;
+        this.banks = instruments.banks;
       });
     this.accountService.getAllAccountByUsername(this.tokenStorage.getUser())
       .subscribe(data => this.accounts = data,
@@ -66,9 +80,19 @@ export class DepositComponent implements OnInit {
     this.showCards = true;
   }
 
+  openBanks() {
+    this.instrumentChosen = true;
+    this.showBanks = true;
+  }
+
   openAddCards() {
     this.showCards = false;
     this.openAddCard = true;
+  }
+
+  openAddBanks() {
+    this.showBanks = false;
+    this.openAddBank = true;
   }
 
   addCard() {
@@ -91,8 +115,28 @@ export class DepositComponent implements OnInit {
 
   }
 
+  addBank() {
+    if (!this.bankForm.valid) {
+      return;
+    }
+
+    const newBank: Bank = {
+      iban: this.bankForm.get('iban')?.value,
+      swift: this.bankForm.get('swift')?.value,
+      country: this.bankForm.get('country')?.value
+    };
+
+    this.paymentInstrumentsService.addBank(newBank)
+      .subscribe(bank => {
+        this.banks.push(bank);
+        this.openAddBank = false;
+        this.showBanks = true;
+      }, error => console.log(error));
+  }
+
   openDeposit(id: number, depositType: string) {
     this.showCards = false;
+    this.showBanks = false;
     this.makeDeposit = true;
     this.chosenId = id;
     this.depositType = depositType;
@@ -129,6 +173,7 @@ export class DepositComponent implements OnInit {
 
   backToOptions() {
     this.showCards = false;
+    this.showBanks = false;
     this.instrumentChosen = false;
   }
 
@@ -136,5 +181,11 @@ export class DepositComponent implements OnInit {
     this.openAddCard = false;
     this.makeDeposit = false;
     this.showCards = true;
+  }
+
+  backToBanks() {
+    this.openAddBank = false;
+    this.makeDeposit = false;
+    this.showBanks = true;
   }
 }

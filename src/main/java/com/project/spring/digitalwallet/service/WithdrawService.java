@@ -2,6 +2,7 @@ package com.project.spring.digitalwallet.service;
 
 import com.project.spring.digitalwallet.dto.upload.MoneyRequest;
 import com.project.spring.digitalwallet.dto.upload.MoneyResponse;
+import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
@@ -15,28 +16,31 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UploadService {
+public class WithdrawService {
 
     private UserService userService;
     private AccountService accountService;
-    private PaymentInstrumentService paymentInstrumentService;
-    private FxRatesService fxRatesService;
     private TransactionService transactionService;
+    private FxRatesService fxRatesService;
+    private PaymentInstrumentService paymentInstrumentService;
 
-    public UploadService(UserService userService, AccountService accountService,
-                         PaymentInstrumentService paymentInstrumentService,
-                         FxRatesService fxRatesService, TransactionService transactionService) {
+    public WithdrawService(UserService userService, AccountService accountService,
+                           TransactionService transactionService,
+                           FxRatesService fxRatesService, PaymentInstrumentService paymentInstrumentService) {
         this.userService = userService;
         this.accountService = accountService;
-        this.fxRatesService = fxRatesService;
         this.transactionService = transactionService;
+        this.fxRatesService = fxRatesService;
+        this.paymentInstrumentService = paymentInstrumentService;
     }
 
-    public MoneyResponse upload(MoneyRequest request) {
+    public MoneyResponse withdraw(MoneyRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(username);
         Account account =
             accountService.getByIdAndWalletId(request.getAccountId(), user.getWalletId());
+
+        validate(request, account);
 
         Type transactionType = paymentInstrumentService.decideTransactionType(request, user.getWalletId());
 
@@ -53,12 +57,21 @@ public class UploadService {
         return new MoneyResponse(request.getAccountId(), created.getStatus(), created.getSlipId());
     }
 
+    private void validate(MoneyRequest request, Account account) {
+        BigDecimal requestedAmount =
+            fxRatesService.getConvertedAmount(account.getCurrency(), request.getCurrency(),
+                request.getAmount());
+        if (account.getBalance().compareTo(requestedAmount) < 0) {
+            throw new InvalidEntityDataException("Not enough balance!");
+        }
+    }
+
     private Transaction buildTransaction(Account account, Type transactionType,
                                          BigDecimal amount) {
         Transaction transaction = new Transaction();
         transaction.setWalletId(account.getWalletId());
         transaction.setAccountId(account.getId());
-        transaction.setDirection(Direction.D);
+        transaction.setDirection(Direction.W);
         transaction.setType(transactionType);
         transaction.setAmount(amount);
         transaction.setCurrency(account.getCurrency());

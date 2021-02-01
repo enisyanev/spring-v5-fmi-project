@@ -21,6 +21,7 @@ import { SendMoneyComponent } from './sendMoney/send.money.component';
 import { AccountComponent } from './account/account.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatCardModule} from "@angular/material/card";
+import { WithdrawComponent } from './withdraw/withdraw.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {MatCardModule} from "@angular/material/card";
     GroupDonateComponent,
     DepositComponent,
     SendMoneyComponent,
-    AccountComponent
+    AccountComponent,
+    WithdrawComponent
   ],
   imports: [
     BrowserModule,

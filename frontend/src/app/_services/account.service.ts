@@ -14,4 +14,12 @@ export class AccountService {
   public getAllAccountByUsername(username:string):Observable<any>{
     return this.http.get('http://localhost:8080/api/account?username='+username, httpOptions)
   }
+  public createAccount(username:string,currency:string):void{
+    this.http.post('http://localhost:8080/api/account/create', {
+            "username":username,
+            "currency":currency,
+          }, httpOptions).subscribe(res => {
+            console.log(res)
+        });
+  }
 }

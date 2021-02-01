@@ -8,6 +8,7 @@ import { GroupComponent } from './group/group.component';
 import { GroupDonateComponent } from './group-donate/group-donate.component';
 import { DepositComponent } from "./deposit/deposit.component";
 import { SendMoneyComponent } from './sendMoney/send.money.component';
+import { AccountComponent } from './account/account.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'deposit', component: DepositComponent },
   { path: 'send-money', component: SendMoneyComponent },
+  { path: 'account/create', component: AccountComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

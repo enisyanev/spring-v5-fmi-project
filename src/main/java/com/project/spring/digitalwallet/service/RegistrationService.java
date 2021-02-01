@@ -13,11 +13,14 @@ public class RegistrationService {
     private UserService userService;
     private WalletService walletService;
     private AccountService accountService;
+    private ScheduledSendMoneyService scheduledSendMoneyService;
 
-    public RegistrationService(UserService userService, WalletService walletService, AccountService accountService) {
+    public RegistrationService(UserService userService, WalletService walletService, AccountService accountService,
+                               ScheduledSendMoneyService scheduledSendMoneyService) {
         this.userService = userService;
         this.walletService = walletService;
         this.accountService = accountService;
+        this.scheduledSendMoneyService = scheduledSendMoneyService;
     }
 
     @Transactional
@@ -29,7 +32,11 @@ public class RegistrationService {
         accountService.createAccount(newAccount);
 
         User newUser = new User(request, createdWallet.getId());
-        return userService.addUser(newUser);
+        User createdUser = userService.addUser(newUser);
+
+        scheduledSendMoneyService.executeScheduledSendMoneys(request.getEmail(), newAccount);
+
+        return createdUser;
     }
 
 }

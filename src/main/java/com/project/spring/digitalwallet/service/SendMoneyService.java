@@ -56,8 +56,7 @@ public class SendMoneyService {
     }
 
     public SendMoneyResponse sendMoney(SendMoneyRequest request) {
-        User user = userService.getUserByUsername(request.getUsername());
-        Long walletId = getWalletId(user.getWalletId());
+        Long walletId = getWalletId(request.getWalletId());
         Account sender =
             accountService
                 .getByIdAndWalletId(request.getAccountId(), walletId);
@@ -146,7 +145,7 @@ public class SendMoneyService {
                 .filter(x -> x.getCurrency().equals(request.getCurrency()))
                 .findFirst()
                 .orElse(walletDto.getDefaultAccount());
-        } catch (NonexistingEntityException e) {
+        } catch (Exception e) {
             // Send money to non-registered
             return null;
         }

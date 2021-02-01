@@ -25,4 +25,6 @@ public class SendMoneyRequest {
 
     private String walletName;
 
+    private Long walletId;
+
 }

@@ -121,8 +121,8 @@ public class RecurringPaymentService {
 
     public List<RecurringPaymentResponse> getRecurringPayments() {
         List<RecurringPaymentResponse> response = new ArrayList<>();
-        List<RecurringPayment> payments = recurringPaymentsRepository.
-                findAllByWalletId(walletService.getWallet().getId());
+        List<RecurringPayment> payments = recurringPaymentsRepository
+                .findAllByWalletId(walletService.getWallet().getId());
         for (int i = 0; i < payments.size(); i++) {
             RecurringPayment payment = payments.get(i);
             if (payment.getActive()) {

@@ -23,6 +23,8 @@ import { MatTableModule } from "@angular/material/table";
 import {MatSortModule} from '@angular/material/sort';
 import { CommonModule } from "@angular/common";
 import { ReccuringComponent } from './reccuring/reccuring.component';
+import {MatCardModule} from "@angular/material/card";
+
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import { ReccuringComponent } from './reccuring/reccuring.component';
     MatInputModule,
     MatSelectModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatCardModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],

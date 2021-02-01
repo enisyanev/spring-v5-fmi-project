@@ -44,7 +44,6 @@ public class UploadService {
         User user = userService.getUserByUsername(username);
         Account account =
             accountService.getByIdAndWalletId(request.getAccountId(), user.getWalletId());
-        validate(request, account);
 
         Type transactionType = getTransactionType(request, user.getWalletId());
 
@@ -59,15 +58,6 @@ public class UploadService {
         Transaction created = transactions.get(0);
 
         return new UploadResponse(request.getAccountId(), created.getStatus(), created.getSlipId());
-    }
-
-    private void validate(UploadRequest request, Account account) {
-        BigDecimal requestedAmount =
-            fxRatesService.getConvertedAmount(account.getCurrency(), request.getCurrency(),
-                request.getAmount());
-        if (account.getBalance().compareTo(requestedAmount) < 0) {
-            throw new InvalidEntityDataException("Not enough balance!");
-        }
     }
 
     private Type getTransactionType(UploadRequest request, long walletId) {

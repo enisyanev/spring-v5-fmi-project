@@ -76,17 +76,6 @@ public class RecurringPaymentService {
         for (int i = 0; i < forExecution.size(); i++) {
             RecurringPayment payment = forExecution.get(i);
             executePayment(payment);
-            if (payment.getPeriod() == RecurringPeriod.DAILY) {
-                payment.setLastExecutionTime(payment.getNextExecutionTime());
-                payment.setNextExecutionTime(payment.getNextExecutionTime().plusDays(1));
-            } else if (payment.getPeriod() == RecurringPeriod.WEEKLY) {
-                payment.setLastExecutionTime(payment.getNextExecutionTime());
-                payment.setNextExecutionTime(payment.getNextExecutionTime().plusWeeks(1));
-            } else {
-                payment.setLastExecutionTime(payment.getNextExecutionTime());
-                payment.setNextExecutionTime(payment.getNextExecutionTime().plusMonths(1));
-            }
-            savePayment(payment);
         }
     }
 

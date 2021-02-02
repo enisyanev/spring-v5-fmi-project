@@ -169,6 +169,9 @@ export class DepositComponent implements OnInit {
   makeAnotherDeposit() {
     this.instrumentChosen = false;
     this.showSuccessMessage = false;
+    this.depositForm.reset();
+    this.depositForm.get('amount')?.disable();
+    this.depositForm.get('currency')?.disable();
   }
 
   backToOptions() {
@@ -181,12 +184,20 @@ export class DepositComponent implements OnInit {
     this.openAddCard = false;
     this.makeDeposit = false;
     this.showCards = true;
+    this.cardForm.reset();
+    this.depositForm.reset();
+    this.depositForm.get('amount')?.disable();
+    this.depositForm.get('currency')?.disable();
   }
 
   backToBanks() {
     this.openAddBank = false;
     this.makeDeposit = false;
     this.showBanks = true;
+    this.bankForm.reset();
+    this.depositForm.reset();
+    this.depositForm.get('amount')?.disable();
+    this.depositForm.get('currency')?.disable();
   }
 
   accountChanged() {

@@ -30,6 +30,7 @@ public class UploadService {
         this.accountService = accountService;
         this.fxRatesService = fxRatesService;
         this.transactionService = transactionService;
+        this.paymentInstrumentService = paymentInstrumentService;
     }
 
     public MoneyResponse upload(MoneyRequest request) {

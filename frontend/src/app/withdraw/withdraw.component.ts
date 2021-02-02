@@ -63,8 +63,7 @@ export class WithdrawComponent implements OnInit {
               private tokenStorage: TokenStorageService,
               private withdrawService: WithdrawService,
               private router: Router,
-              private snackBar: MatSnackBar,
-              private snackBarRef: MatSnackBarRef<string>) {
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -116,6 +115,10 @@ export class WithdrawComponent implements OnInit {
     this.openAddCard = false;
     this.makeWithdraw = false;
     this.showCards = true;
+    this.cardForm.reset();
+    this.withdrawForm.reset();
+    this.withdrawForm.get('amount')?.disable();
+    this.withdrawForm.get('currency')?.disable();
   }
 
   addCard() {
@@ -166,6 +169,10 @@ export class WithdrawComponent implements OnInit {
     this.openAddBank = false;
     this.makeWithdraw = false;
     this.showBanks = true;
+    this.bankForm.reset();
+    this.withdrawForm.reset();
+    this.withdrawForm.get('amount')?.disable();
+    this.withdrawForm.get('currency')?.disable();
   }
 
   doWithdraw() {
@@ -203,6 +210,9 @@ export class WithdrawComponent implements OnInit {
   makeAnotherWithdraw() {
     this.instrumentChosen = false;
     this.showSuccessMessage = false;
+    this.withdrawForm.reset();
+    this.withdrawForm.get('amount')?.disable();
+    this.withdrawForm.get('currency')?.disable();
   }
 
   accountChanged() {

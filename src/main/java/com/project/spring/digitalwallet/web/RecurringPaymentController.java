@@ -1,6 +1,7 @@
 package com.project.spring.digitalwallet.web;
 
 import com.project.spring.digitalwallet.dto.recurringpayments.RecurringPaymentRequest;
+import com.project.spring.digitalwallet.dto.recurringpayments.RecurringPaymentResponse;
 import com.project.spring.digitalwallet.dto.recurringpayments.UpdateRecurringPaymentRequest;
 import com.project.spring.digitalwallet.model.recurring.RecurringPayment;
 import com.project.spring.digitalwallet.service.RecurringPaymentService;
@@ -25,7 +26,7 @@ public class RecurringPaymentController {
     }
 
     @GetMapping
-    public List<RecurringPayment> getRecurringPayments() {
+    public List<RecurringPaymentResponse> getRecurringPayments() {
         return recurringPaymentService.getRecurringPayments();
     }
 

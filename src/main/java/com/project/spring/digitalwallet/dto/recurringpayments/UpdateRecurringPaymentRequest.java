@@ -14,8 +14,6 @@ public class UpdateRecurringPaymentRequest {
     @NotNull
     private BigDecimal amount;
     @NotNull
-    private Boolean active;
-    @NotNull
     private RecurringPeriod period;
 
 }

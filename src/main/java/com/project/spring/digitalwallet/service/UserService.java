@@ -5,7 +5,9 @@ import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.user.Role;
 import com.project.spring.digitalwallet.model.user.User;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,12 +29,12 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepo.findById(id).orElseThrow(() ->
-            new NonexistingEntityException(String.format("User with ID:%s does not exist.", id)));
+                new NonexistingEntityException(String.format("User with ID:%s does not exist.", id)));
     }
 
     public User getUserByUsername(String username) {
         return userRepo.findByUsername(username).orElseThrow(() ->
-            new InvalidEntityDataException("Invalid username or password."));
+                new InvalidEntityDataException("Invalid username or password."));
     }
 
     public User addUser(User user) {
@@ -44,8 +46,17 @@ public class UserService {
 
     public User updateUser(User user) {
         userRepo.findByUsername(user.getUsername()).orElseThrow(() ->
-            new InvalidEntityDataException("No user with that name"));
+                new InvalidEntityDataException("No user with that name"));
         return userRepo.save(user);
+    }
+
+    public User getUserByWalletId(long walletId) {
+        return userRepo.findByWalletId(walletId);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepo.findByUsername(email).orElseThrow(() ->
+                new InvalidEntityDataException("Invalid username or password."));
     }
 
     public User deleteUser(String username) {

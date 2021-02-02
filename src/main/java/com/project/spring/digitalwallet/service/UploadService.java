@@ -1,12 +1,8 @@
 package com.project.spring.digitalwallet.service;
 
-import com.project.spring.digitalwallet.dto.upload.PaymentInstrumentType;
-import com.project.spring.digitalwallet.dto.upload.UploadRequest;
-import com.project.spring.digitalwallet.dto.upload.UploadResponse;
-import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
+import com.project.spring.digitalwallet.dto.upload.MoneyRequest;
+import com.project.spring.digitalwallet.dto.upload.MoneyResponse;
 import com.project.spring.digitalwallet.model.Account;
-import com.project.spring.digitalwallet.model.card.Card;
-import com.project.spring.digitalwallet.model.card.CardType;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
 import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
@@ -23,30 +19,26 @@ public class UploadService {
 
     private UserService userService;
     private AccountService accountService;
-    private CardService cardService;
-    private BankService bankService;
+    private PaymentInstrumentService paymentInstrumentService;
     private FxRatesService fxRatesService;
     private TransactionService transactionService;
 
     public UploadService(UserService userService, AccountService accountService,
-                         CardService cardService, BankService bankService,
+                         PaymentInstrumentService paymentInstrumentService,
                          FxRatesService fxRatesService, TransactionService transactionService) {
         this.userService = userService;
         this.accountService = accountService;
-        this.cardService = cardService;
-        this.bankService = bankService;
         this.fxRatesService = fxRatesService;
         this.transactionService = transactionService;
     }
 
-    public UploadResponse upload(UploadRequest request) {
+    public MoneyResponse upload(MoneyRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByUsername(username);
         Account account =
             accountService.getByIdAndWalletId(request.getAccountId(), user.getWalletId());
-        validate(request, account);
 
-        Type transactionType = getTransactionType(request, user.getWalletId());
+        Type transactionType = paymentInstrumentService.decideTransactionType(request, user.getWalletId());
 
         // Convert to accounts currency and store it in that currency
         BigDecimal amount = fxRatesService.getConvertedAmount(request.getCurrency(),
@@ -58,34 +50,7 @@ public class UploadService {
 
         Transaction created = transactions.get(0);
 
-        return new UploadResponse(request.getAccountId(), created.getStatus(), created.getSlipId());
-    }
-
-    private void validate(UploadRequest request, Account account) {
-        BigDecimal requestedAmount =
-            fxRatesService.getConvertedAmount(account.getCurrency(), request.getCurrency(),
-                request.getAmount());
-        if (account.getBalance().compareTo(requestedAmount) < 0) {
-            throw new InvalidEntityDataException("Not enough balance!");
-        }
-    }
-
-    private Type getTransactionType(UploadRequest request, long walletId) {
-
-        if (request.getType() == PaymentInstrumentType.CARD) {
-            Card card = cardService.getByIdAndWalletId(request.getInstrumentId(), walletId);
-
-            return card.getCardType() == CardType.VISA ? Type.VISA : Type.MASTERCARD;
-        }
-
-        if (request.getType() == PaymentInstrumentType.BANK_ACCOUNT) {
-            // use it just for validation
-            bankService.getByIdAndWalletId(request.getInstrumentId(), walletId);
-
-            return Type.BANKWIRE;
-        }
-
-        throw new InvalidEntityDataException("Wrong instrument type!");
+        return new MoneyResponse(request.getAccountId(), created.getStatus(), created.getSlipId());
     }
 
     private Transaction buildTransaction(Account account, Type transactionType,

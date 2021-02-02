@@ -7,6 +7,7 @@ import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Slip;
 import com.project.spring.digitalwallet.model.transaction.Transaction;
+import com.project.spring.digitalwallet.model.transaction.TransactionStatus;
 import com.project.spring.digitalwallet.model.user.User;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -52,6 +53,12 @@ public class TransactionService {
                 String.format("Transaction with ID:%s does not exist.", id)));
     }
 
+    public Transaction getBySlipId(Long slipId) {
+        return transactionRepository.findFirstBySlipId(slipId).orElseThrow(() ->
+            new NonexistingEntityException(
+                String.format("Transaction with slip id:%s does not exist.", slipId)));
+    }
+
     @Transactional
     public List<Transaction> createTransactions(List<Transaction> transactions) {
         List<Transaction> created = new ArrayList<>();
@@ -76,6 +83,12 @@ public class TransactionService {
         transaction.setSlipId(slipId);
         accountService.updateBalance(transaction.getAccountId(), amount);
         return transactionRepository.save(transaction);
+    }
+
+    public void updateStatus(Long trnId, TransactionStatus status) {
+        Transaction trn = getById(trnId);
+        trn.setStatus(status);
+        transactionRepository.save(trn);
     }
 
     public List<TransactionDto> getTransactionsHistory(int pageNo, int pageSize) {

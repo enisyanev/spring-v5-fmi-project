@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { RegistrationDto } from "../model/RegistrationDto";
 
 const AUTH_API = 'http://localhost:8080/api/';
 
@@ -12,6 +13,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+
+  public isLoggedIn: boolean = false;
+
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
@@ -21,14 +25,7 @@ export class AuthService {
     }, httpOptions);
   }
 
-  register(username: string, password: string, email: string,firstname:string,lastname:string,walletId:BigInteger): Observable<any> {
-    return this.http.post(AUTH_API + 'register', {
-      username,
-      password,
-      email,
-      firstname,
-      lastname,
-      walletId
-    }, httpOptions);
+  register(request: RegistrationDto): Observable<any> {
+    return this.http.post(AUTH_API + 'register', request, httpOptions);
   }
 }

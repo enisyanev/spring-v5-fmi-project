@@ -31,6 +31,13 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
+    public Account(long walletId, String currency) {
+        this.walletId = walletId;
+        this.currency = currency;
+        this.balance = BigDecimal.ZERO;
+        this.status = AccountStatus.PRIMARY;
+    }
+
     public BigDecimal getBalance() {
         return balance.setScale(2, RoundingMode.DOWN);
     }

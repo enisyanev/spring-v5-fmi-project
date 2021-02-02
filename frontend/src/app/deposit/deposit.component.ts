@@ -46,8 +46,8 @@ export class DepositComponent implements OnInit {
 
   depositForm = new FormGroup({
     accountId: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
-    currency: new FormControl('', Validators.required)
+    amount: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.min(0.000001)]),
+    currency: new FormControl({ value: '', disabled: true }, Validators.required)
   });
 
   showSuccessMessage: boolean = false;
@@ -187,5 +187,10 @@ export class DepositComponent implements OnInit {
     this.openAddBank = false;
     this.makeDeposit = false;
     this.showBanks = true;
+  }
+
+  accountChanged() {
+    this.depositForm.get('amount')?.enable();
+    this.depositForm.get('currency')?.enable();
   }
 }

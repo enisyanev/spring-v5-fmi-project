@@ -27,6 +27,9 @@ import {MatCardModule} from "@angular/material/card";
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import {MatSnackBarModule, MatSnackBarRef} from "@angular/material/snack-bar";
+import { ErrorSnackbarComponent } from './shared/error-snackbar/error-snackbar.component';
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -41,7 +44,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     AccountComponent,
     ReccuringComponent,
     WithdrawComponent,
-    DialogEditReccuring
+    DialogEditReccuring,
+    ErrorSnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -58,10 +62,15 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatTableModule,
     MatSortModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule,
+    MatIconModule
   ],
   entryComponents: [ReccuringComponent, DialogEditReccuring],
-  providers: [authInterceptorProviders],
-  bootstrap: [AppComponent],
+  providers: [authInterceptorProviders, {
+    provide: MatSnackBarRef,
+    useValue: {}
+  }],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

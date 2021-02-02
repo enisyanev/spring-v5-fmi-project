@@ -1,0 +1,11 @@
+.error-snackbar {
+  display: flex;
+}
+
+#icon-error {
+  color: red;
+}
+
+mat-icon {
+  margin-right: 20px;
+}

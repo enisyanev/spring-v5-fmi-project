@@ -155,6 +155,8 @@
           <mat-select required formControlName="country">
             <mat-option value="BUL">Bulgaria</mat-option>
             <mat-option value="GRE">Greece</mat-option>
+            <mat-option value="GER">Germany</mat-option>
+            <mat-option value="USA">USA</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -179,15 +181,18 @@
       <div class="form-group">
         <mat-form-field appearance="fill">
           <mat-label>Account</mat-label>
-          <mat-select required formControlName="accountId">
+          <mat-select required formControlName="accountId" (valueChange)="accountChanged()">
             <mat-option *ngFor="let account of accounts"
                         [value]="account.id">{{account.currency}}</mat-option>
           </mat-select>
+          <mat-error *ngIf="depositForm.controls.accountId.errors?.required">Account is required</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Amount</mat-label>
           <input matInput type="number" required formControlName="amount">
+          <mat-error *ngIf="depositForm.controls.amount.errors?.required">Amount is required</mat-error>
+          <mat-error *ngIf="depositForm.controls.amount.errors?.min">Amount is less than allowed</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -195,7 +200,9 @@
           <mat-select required formControlName="currency">
             <mat-option value="EUR">Euro</mat-option>
             <mat-option value="BGN">Bulgarian Lev</mat-option>
+            <mat-option value="USD">US Dollar</mat-option>
           </mat-select>
+          <mat-error *ngIf="depositForm.controls.currency.errors?.required">Currency is required</mat-error>
         </mat-form-field>
 
         <div class="form-button">

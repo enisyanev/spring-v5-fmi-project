@@ -19,6 +19,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class RecurringPaymentResponse {
     @NotBlank
+    private long id;
+    @NotBlank
     private String receiver;
     @NotNull
     private BigDecimal amount;

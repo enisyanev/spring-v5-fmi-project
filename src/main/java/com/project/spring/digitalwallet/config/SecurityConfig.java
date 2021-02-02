@@ -1,9 +1,6 @@
 package com.project.spring.digitalwallet.config;
 
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-
 import com.project.spring.digitalwallet.model.user.Role;
 import com.project.spring.digitalwallet.service.UserService;
 import com.project.spring.digitalwallet.web.jwt.FilterChainExceptionHandlerFilter;
@@ -19,6 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.DELETE;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -51,7 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(POST, "/api/upload").hasAnyRole(ALL_ROLES)
                 .antMatchers(GET, "/api/recurring-payments").hasAnyRole(ALL_ROLES)
                 .antMatchers(POST, "/api/recurring-payments").hasAnyRole(ALL_ROLES)
+                .antMatchers(DELETE, "/api/recurring-payments/**").hasAnyRole(ALL_ROLES)
+                .antMatchers(PUT, "/api/recurring-payments/**").hasAnyRole(ALL_ROLES)
                 .antMatchers(POST, "/api/payment-instruments/**").hasAnyRole(ALL_ROLES)
+                .antMatchers(PUT, "/api/payment-instruments/**").hasAnyRole(ALL_ROLES)
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

@@ -12,6 +12,7 @@ import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.model.recurring.RecurringPayment;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,10 @@ public class RecurringPaymentService {
 
         RecurringPayment recurringPayment = buildRecurringPayment(request, recipient, sender.getId());
         recurringPaymentsRepository.save(recurringPayment);
+    }
+
+    public void deleteRecurringPayment(Long id) {
+        recurringPaymentsRepository.deleteById(id);
     }
 
     private WalletDto validate(RecurringPaymentRequest request, Long senderWalletId) {
@@ -116,7 +121,7 @@ public class RecurringPaymentService {
             RecurringPayment payment = payments.get(i);
             if (payment.getActive()) {
                 RecurringPaymentResponse singleResponse =
-                        new RecurringPaymentResponse(payment.getRecipient(),
+                        new RecurringPaymentResponse(payment.getId(), payment.getRecipient(),
                                 payment.getAmount(),
                                 payment.getLastExecutionTime(),
                                 payment.getNextExecutionTime(),
@@ -139,8 +144,9 @@ public class RecurringPaymentService {
                         String.format("Recurring payment with ID:%s for wallet with ID:%s does not exist.",
                                 id, walletId)));
 
-        payment.setActive(request.getActive());
-        payment.setAmount(request.getAmount());
+        if (request.getAmount() != BigDecimal.valueOf(0)) {
+            payment.setAmount(request.getAmount());
+        }
         payment.setPeriod(request.getPeriod());
 
         recurringPaymentsRepository.save(payment);

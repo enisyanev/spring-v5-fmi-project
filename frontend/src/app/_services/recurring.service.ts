@@ -24,4 +24,19 @@ export class RecurringService {
         console.log(res)
     });  
   }
+  public deleteRecurring(id:number):void{
+    this.http.delete('http://localhost:8080/api/recurring-payments/'+id
+    , httpOptions).subscribe(res => {
+        console.log(res)
+    }); 
+  }
+  public updateRecurring(id:number,amount:number,period:string):void{
+    this.http.put('http://localhost:8080/api/recurring-payments/'+id, {
+      "amount":amount,
+      "period":period
+    }
+    , httpOptions).subscribe(res => {
+        console.log(res)
+    }); 
+  }
 }

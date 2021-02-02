@@ -22,9 +22,10 @@ import { AccountComponent } from './account/account.component';
 import { MatTableModule } from "@angular/material/table";
 import {MatSortModule} from '@angular/material/sort';
 import { CommonModule } from "@angular/common";
-import { ReccuringComponent } from './reccuring/reccuring.component';
+import { DialogEditReccuring, ReccuringComponent } from './reccuring/reccuring.component';
 import {MatCardModule} from "@angular/material/card";
 import { WithdrawComponent } from './withdraw/withdraw.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { WithdrawComponent } from './withdraw/withdraw.component';
     SendMoneyComponent,
     AccountComponent,
     ReccuringComponent,
-    WithdrawComponent
+    WithdrawComponent,
+    DialogEditReccuring
   ],
   imports: [
     CommonModule,
@@ -55,8 +57,10 @@ import { WithdrawComponent } from './withdraw/withdraw.component';
     MatSelectModule,
     MatTableModule,
     MatSortModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
+  entryComponents: [ReccuringComponent, DialogEditReccuring],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent],
 })

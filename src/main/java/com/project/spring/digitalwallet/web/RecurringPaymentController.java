@@ -5,15 +5,18 @@ import com.project.spring.digitalwallet.dto.recurringpayments.RecurringPaymentRe
 import com.project.spring.digitalwallet.dto.recurringpayments.UpdateRecurringPaymentRequest;
 import com.project.spring.digitalwallet.model.recurring.RecurringPayment;
 import com.project.spring.digitalwallet.service.RecurringPaymentService;
+
 import java.util.List;
 import javax.validation.Valid;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/recurring-payments")
@@ -28,6 +31,11 @@ public class RecurringPaymentController {
     @GetMapping
     public List<RecurringPaymentResponse> getRecurringPayments() {
         return recurringPaymentService.getRecurringPayments();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteReccuring(@PathVariable("id") Long recurringPaymentId) {
+        recurringPaymentService.deleteRecurringPayment(recurringPaymentId);
     }
 
     @PostMapping

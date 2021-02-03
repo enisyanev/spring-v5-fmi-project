@@ -46,8 +46,8 @@ export class DepositComponent implements OnInit {
 
   depositForm = new FormGroup({
     accountId: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
-    currency: new FormControl('', Validators.required)
+    amount: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.min(0.000001)]),
+    currency: new FormControl({ value: '', disabled: true }, Validators.required)
   });
 
   showSuccessMessage: boolean = false;
@@ -169,6 +169,9 @@ export class DepositComponent implements OnInit {
   makeAnotherDeposit() {
     this.instrumentChosen = false;
     this.showSuccessMessage = false;
+    this.depositForm.reset();
+    this.depositForm.get('amount')?.disable();
+    this.depositForm.get('currency')?.disable();
   }
 
   backToOptions() {
@@ -181,11 +184,24 @@ export class DepositComponent implements OnInit {
     this.openAddCard = false;
     this.makeDeposit = false;
     this.showCards = true;
+    this.cardForm.reset();
+    this.depositForm.reset();
+    this.depositForm.get('amount')?.disable();
+    this.depositForm.get('currency')?.disable();
   }
 
   backToBanks() {
     this.openAddBank = false;
     this.makeDeposit = false;
     this.showBanks = true;
+    this.bankForm.reset();
+    this.depositForm.reset();
+    this.depositForm.get('amount')?.disable();
+    this.depositForm.get('currency')?.disable();
+  }
+
+  accountChanged() {
+    this.depositForm.get('amount')?.enable();
+    this.depositForm.get('currency')?.enable();
   }
 }

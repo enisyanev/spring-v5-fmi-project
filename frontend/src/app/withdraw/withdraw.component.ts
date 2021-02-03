@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PaymentInstrumentsService} from "../_services/payment-instruments.service";
 import {Card} from "../model/Card";
 import {Bank} from "../model/Bank";
@@ -9,6 +9,8 @@ import {TokenStorageService} from "../_services/token-storage.service";
 import {UploadRequest} from "../model/UploadRequest";
 import {WithdrawService} from "../_services/withdraw.service";
 import {Router} from "@angular/router";
+import {MatSnackBar, MatSnackBarRef} from "@angular/material/snack-bar";
+import {ErrorSnackbarComponent} from "../shared/error-snackbar/error-snackbar.component";
 
 @Component({
   selector: 'app-withdraw',
@@ -47,8 +49,11 @@ export class WithdrawComponent implements OnInit {
 
   withdrawForm = new FormGroup({
     accountId: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
-    currency: new FormControl('', Validators.required)
+    amount: new FormControl({
+      value: '',
+      disabled: true
+    }, [Validators.required, Validators.min(0.000001)]),
+    currency: new FormControl({value: '', disabled: true}, Validators.required)
   });
 
   showSuccessMessage: boolean = false;
@@ -57,7 +62,9 @@ export class WithdrawComponent implements OnInit {
               private accountService: AccountService,
               private tokenStorage: TokenStorageService,
               private withdrawService: WithdrawService,
-              private router: Router) { }
+              private router: Router,
+              private snackBar: MatSnackBar) {
+  }
 
   ngOnInit(): void {
     this.instrumentChosen = false;
@@ -108,6 +115,10 @@ export class WithdrawComponent implements OnInit {
     this.openAddCard = false;
     this.makeWithdraw = false;
     this.showCards = true;
+    this.cardForm.reset();
+    this.withdrawForm.reset();
+    this.withdrawForm.get('amount')?.disable();
+    this.withdrawForm.get('currency')?.disable();
   }
 
   addCard() {
@@ -158,6 +169,10 @@ export class WithdrawComponent implements OnInit {
     this.openAddBank = false;
     this.makeWithdraw = false;
     this.showBanks = true;
+    this.bankForm.reset();
+    this.withdrawForm.reset();
+    this.withdrawForm.get('amount')?.disable();
+    this.withdrawForm.get('currency')?.disable();
   }
 
   doWithdraw() {
@@ -177,7 +192,15 @@ export class WithdrawComponent implements OnInit {
       () => {
         this.showSuccessMessage = true;
         this.makeWithdraw = false;
-      }, error => console.log(error));
+      }, error => {
+        this.showFailedSnackBar(error.error.message);
+        console.log(error.error.message);
+      });
+  }
+
+  showFailedSnackBar(message: string) {
+    const snackBarRef = this.snackBar.openFromComponent(ErrorSnackbarComponent, {data: {message: message}});
+    snackBarRef._dismissAfter(2000);
   }
 
   goToHomePage() {
@@ -187,5 +210,13 @@ export class WithdrawComponent implements OnInit {
   makeAnotherWithdraw() {
     this.instrumentChosen = false;
     this.showSuccessMessage = false;
+    this.withdrawForm.reset();
+    this.withdrawForm.get('amount')?.disable();
+    this.withdrawForm.get('currency')?.disable();
+  }
+
+  accountChanged() {
+    this.withdrawForm.get('amount')?.enable();
+    this.withdrawForm.get('currency')?.enable();
   }
 }

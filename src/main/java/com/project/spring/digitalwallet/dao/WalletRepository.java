@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
     Optional<Wallet> findByName(String name);
+
+    int countByName(String email);
 }

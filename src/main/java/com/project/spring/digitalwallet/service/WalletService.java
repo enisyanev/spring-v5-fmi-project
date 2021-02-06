@@ -7,6 +7,7 @@ import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.model.user.User;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,9 @@ public class WalletService {
         User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         return walletRepo.findById(user.getWalletId()).orElseThrow(() ->
             new NonexistingEntityException(String.format("Wallet with ID:%s does not exist.", user.getWalletId())));
+    }
+
+    public boolean exists(String email) {
+        return walletRepo.countByName(email) > 0;
     }
 }

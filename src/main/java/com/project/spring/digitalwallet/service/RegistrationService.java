@@ -1,6 +1,7 @@
 package com.project.spring.digitalwallet.service;
 
 import com.project.spring.digitalwallet.dto.registration.RegistrationDto;
+import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.model.user.User;
@@ -25,6 +26,9 @@ public class RegistrationService {
 
     @Transactional
     public User register(RegistrationDto request) {
+        if (walletService.exists(request.getEmail())) {
+            throw new InvalidEntityDataException("There is already registered wallet with this email in the system!");
+        }
         Wallet wallet = new Wallet(request.getEmail());
         Wallet createdWallet = walletService.addWallet(wallet);
 

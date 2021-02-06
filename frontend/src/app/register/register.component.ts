@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
     password: '',
     firstName: '',
     lastName: '',
-    currency: 'EUR'
+    currency: ''
   };
   isSuccessful = false;
   isSignUpFailed = false;

@@ -25,7 +25,7 @@ public class TransactionController {
         return transactionService.getTransactionsHistory(pageNo, pageSize);
     }
 
-    @PostMapping
+    @GetMapping("/csv")
     public void downloadTransactionsHistoryAsCsv(HttpServletResponse response) throws IOException {
         transactionService.downloadTransactionsHistoryAsCsv(response);
     }

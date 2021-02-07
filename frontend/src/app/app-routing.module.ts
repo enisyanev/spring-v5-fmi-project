@@ -10,7 +10,8 @@ import { DepositComponent } from "./deposit/deposit.component";
 import { SendMoneyComponent } from './sendMoney/send.money.component';
 import { AccountComponent } from './account/account.component';
 import { ReccuringComponent } from './reccuring/reccuring.component';
-import {WithdrawComponent} from "./withdraw/withdraw.component";
+import { WithdrawComponent } from "./withdraw/withdraw.component";
+import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'send-money', component: SendMoneyComponent },
   { path: 'account/create', component: AccountComponent },
   { path: 'reccuring', component: ReccuringComponent },
+  { path: 'transactions/history', component: TransactionsHistoryComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

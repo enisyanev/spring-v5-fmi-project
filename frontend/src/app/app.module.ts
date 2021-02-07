@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,16 +20,17 @@ import { MatSelectModule } from "@angular/material/select";
 import { SendMoneyComponent } from './sendMoney/send.money.component';
 import { AccountComponent } from './account/account.component';
 import { MatTableModule } from "@angular/material/table";
-import {MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { CommonModule } from "@angular/common";
 import { DialogEditReccuring, ReccuringComponent } from './reccuring/reccuring.component';
-import {MatCardModule} from "@angular/material/card";
+import { MatCardModule } from "@angular/material/card";
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import {MatSnackBarModule, MatSnackBarRef} from "@angular/material/snack-bar";
+import { MatSnackBarModule, MatSnackBarRef } from "@angular/material/snack-bar";
 import { ErrorSnackbarComponent } from './shared/error-snackbar/error-snackbar.component';
-import {MatIconModule} from "@angular/material/icon";
+import { MatIconModule } from "@angular/material/icon";
+import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {MatIconModule} from "@angular/material/icon";
     ReccuringComponent,
     WithdrawComponent,
     DialogEditReccuring,
-    ErrorSnackbarComponent
+    ErrorSnackbarComponent,
+    TransactionsHistoryComponent
   ],
   imports: [
     CommonModule,

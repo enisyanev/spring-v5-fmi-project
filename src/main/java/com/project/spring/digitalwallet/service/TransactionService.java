@@ -3,6 +3,7 @@ package com.project.spring.digitalwallet.service;
 import com.project.spring.digitalwallet.dao.SlipRepository;
 import com.project.spring.digitalwallet.dao.TransactionRepository;
 import com.project.spring.digitalwallet.dto.transaction.TransactionDto;
+import com.project.spring.digitalwallet.dto.transaction.TransactionsHistoryPagedDto;
 import com.project.spring.digitalwallet.exception.NonexistingEntityException;
 import com.project.spring.digitalwallet.model.transaction.Direction;
 import com.project.spring.digitalwallet.model.transaction.Slip;
@@ -16,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -91,12 +93,13 @@ public class TransactionService {
         transactionRepository.save(trn);
     }
 
-    public List<TransactionDto> getTransactionsHistory(int pageNo, int pageSize) {
+    public TransactionsHistoryPagedDto getTransactionsHistory(int pageNo, int pageSize) {
         User user = getLoggedUser();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        List<Transaction> transactionHistory =
-            transactionRepository.findByWalletId(user.getWalletId(), pageable).getContent();
-        return convertTransactionsToDto(transactionHistory);
+        Page<Transaction> transactionHistory = transactionRepository.findByWalletId(user.getWalletId(), pageable);
+        TransactionsHistoryPagedDto test =  new TransactionsHistoryPagedDto(convertTransactionsToDto(transactionHistory.getContent()),
+                transactionHistory.getTotalPages(), transactionHistory.getNumber() + 1, transactionHistory.getSize());
+        return test;
     }
 
     public List<TransactionDto> getTransactionsHistory() {

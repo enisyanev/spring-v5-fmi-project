@@ -97,9 +97,8 @@ public class TransactionService {
         User user = getLoggedUser();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<Transaction> transactionHistory = transactionRepository.findByWalletId(user.getWalletId(), pageable);
-        TransactionsHistoryPagedDto test =  new TransactionsHistoryPagedDto(convertTransactionsToDto(transactionHistory.getContent()),
+        return new TransactionsHistoryPagedDto(convertTransactionsToDto(transactionHistory.getContent()),
                 transactionHistory.getTotalPages(), transactionHistory.getNumber() + 1, transactionHistory.getSize());
-        return test;
     }
 
     public List<TransactionDto> getTransactionsHistory() {

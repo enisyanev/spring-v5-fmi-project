@@ -49,3 +49,7 @@
 
     </div>
   </div>
+ 
+<input #file class="form-control" type="file" accept=".csv" (change)="selectFile($event)">
+<button class="btn btn-md btn-primary btn-style"  (click)="uploadFile()">Upload</button>
+

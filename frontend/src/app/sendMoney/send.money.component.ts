@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {TokenStorageService} from '../_services/token-storage.service';
-import {AccountService} from '../_services/account.service';
-import {SendMoneyService} from '../_services/send-money.service';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Account} from "../model/Account";
-import {finalize} from "rxjs/operators";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { TokenStorageService } from '../_services/token-storage.service';
+import { AccountService } from '../_services/account.service';
+import { SendMoneyService } from '../_services/send-money.service';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Account } from "../model/Account";
+import { finalize } from "rxjs/operators";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'send-money',
@@ -26,9 +27,13 @@ export class SendMoneyComponent implements OnInit {
   scheduled = false;
   response = "";
 
+  selectedFile!: File;
+  @ViewChild('file') file!: ElementRef;
+
+
   constructor(private tokenS: TokenStorageService,
-              private accountService: AccountService,
-              private sendMoneyService: SendMoneyService) {
+    private accountService: AccountService,
+    private sendMoneyService: SendMoneyService) {
   }
 
   ngOnInit(): void {
@@ -58,10 +63,45 @@ export class SendMoneyComponent implements OnInit {
           this.response = "Something went wrong";
           this.failed = true;
         }
-      }, error =>  {
+      }, error => {
         this.response = error.error.message;
         this.failed = true;
       });
   }
+
+  selectFile(event: any) {
+    const file = event.target.files.item(0);
+    this.selectedFile = file;
+  }
+
+  uploadFile() {
+    this.file.nativeElement.value = null;
+    this.sendMoneyService.uploadFile(this.selectedFile).subscribe(
+      rsp => {
+        this.manageResponseWhenCsvIsUpload(rsp);
+      },
+      error => {
+        alert(error);
+      });
+  }
+
+  manageResponseWhenCsvIsUpload(response: any) {
+    let errorMessages: string[] = [];
+    for (let i = 0; i < response.length; i++) {
+      let rsp = response[i];
+      if (rsp.message != undefined) {
+        let index: number = i + 1;
+        let errorMessage = "Transaction number " + index + " failed due to: " + rsp.message;
+        errorMessages.push(errorMessage);
+      }
+    }
+    if (errorMessages.length == 0) {
+      alert("All transactions were successfully created.");
+      this.selectedFile;
+    } else {
+      alert(errorMessages.join("\n"));
+    }
+  }
+
 
 }

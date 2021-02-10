@@ -28,7 +28,7 @@ public class SendMoneyController {
     }
 
     @PostMapping("/csv")
-    public List<SendMoneyResponse> sendMoneyUsingCsvFile(@RequestParam("file") MultipartFile file) {
+    public List<Object> sendMoneyUsingCsvFile(@RequestParam("file") MultipartFile file) {
         return sendMoneyService.sendMoneyUsingCsvFile(file);
     }
 

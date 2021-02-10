@@ -94,14 +94,14 @@ public class SendMoneyService {
             senderTransaction.getAccountId(), senderTransaction.getStatus());
     }
 
-    public List<SendMoneyResponse> sendMoneyUsingCsvFile(MultipartFile file) {
+    public List<Object> sendMoneyUsingCsvFile(MultipartFile file) {
         try (InputStream is = file.getInputStream();
                 BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 CSVParser csvParser = new CSVParser(fileReader,
                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-            List<SendMoneyResponse> response = new ArrayList<>();
+            List<Object> response = new ArrayList<>();
 
             for (CSVRecord csvRecord : csvRecords) {
                 SendMoneyRequest request = new SendMoneyRequest();
@@ -109,7 +109,11 @@ public class SendMoneyService {
                 request.setAmount(new BigDecimal(csvRecord.get("Amount")));
                 request.setCurrency(csvRecord.get("Currency"));
                 request.setWalletName(csvRecord.get("Wallet Name"));
-                response.add(sendMoney(request));
+                try {
+                    response.add(sendMoney(request));
+                } catch (InvalidEntityDataException | NonexistingEntityException e) {
+                    response.add(e);
+                }
             }
 
             return response;

@@ -1,13 +1,32 @@
-label {
+  table {
+  width: 100%;
+  }
+  
+  label {
     display: block;
     margin-top: 10px;
   }
-  
+
+  .instruments {
+    margin-left: 43%;
+    position: center;
+  }
+
+  .instruments1 {
+    margin-left: 47%;
+    position: center;
+  }
+
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+
   .card-container.card {
     max-width: 400px !important;
     padding: 40px 40px;
   }
-  
+
   .card {
     background-color: #f7f7f7;
     padding: 20px 25px 30px;

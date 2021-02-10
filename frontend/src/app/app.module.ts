@@ -31,6 +31,7 @@ import { MatSnackBarModule, MatSnackBarRef } from "@angular/material/snack-bar";
 import { ErrorSnackbarComponent } from './shared/error-snackbar/error-snackbar.component';
 import { MatIconModule } from "@angular/material/icon";
 import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { TransactionsHistoryComponent } from './transactions-history/transaction
     MatCardModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    MatPaginatorModule
   ],
   entryComponents: [ReccuringComponent, DialogEditReccuring],
   providers: [authInterceptorProviders, {

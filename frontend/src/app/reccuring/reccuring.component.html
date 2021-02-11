@@ -4,17 +4,17 @@
       <th mat-header-cell *matHeaderCellDef> Receiver </th>
       <td mat-cell *matCellDef="let reccuring"> {{reccuring.receiver}} </td>
     </ng-container>
-  
+
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef> Amount </th>
       <td mat-cell *matCellDef="let reccuring"> {{reccuring.amount}} </td>
     </ng-container>
-  
+
     <ng-container matColumnDef="lastExecutionTime">
       <th mat-header-cell *matHeaderCellDef> Last Execution Time </th>
       <td mat-cell *matCellDef="let reccuring"> {{reccuring.lastDate}} </td>
     </ng-container>
-  
+
     <ng-container matColumnDef="nextExecutionTime">
       <th mat-header-cell *matHeaderCellDef> Next Execution Time </th>
       <td mat-cell *matCellDef="let reccuring"> {{reccuring.nextDate}} </td>
@@ -27,12 +27,12 @@
 
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef> Action </th>
-      <td mat-cell *matCellDef="let reccuring" class="action-link"> 
-        <button mat-stroked-button (click)="openDialogBox(reccuring.id)">Edit</button> | 
-        <button mat-stroked-button (click)="deleteRecurring(reccuring.id)">Delete</button>  
+      <td mat-cell *matCellDef="let reccuring" class="action-link">
+        <button mat-stroked-button (click)="openDialogBox(reccuring.id)">Edit</button> |
+        <button mat-stroked-button (click)="deleteRecurring(reccuring.id)">Delete</button>
       </td>
     </ng-container>
-  
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
@@ -59,28 +59,43 @@
         required
         #email="ngModel"
       />
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="email.errors && f.submitted"
+      >
+      Email is required!
+      </div>
     </div>
     <div class="form-group">
       <label for="amount">Amount</label>
       <input
         type="number"
+        min="0"
         class="form-control"
         name="amount"
         [(ngModel)]="form.amount"
         required
         #amount="ngModel"
       />
+      <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="amount.errors && f.submitted"
+        >
+        Amount is required!
+        </div>
     </div>
     <div class="form-group">
       <label for="group">Period</label>
-        <select class="form-control" name="period" [(ngModel)]="selectedPeriod">
+        <select class="form-control" required name="period" [(ngModel)]="selectedPeriod">
             <option *ngFor="let c of periods" [ngValue]="c.name">{{c.name}}</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="group">Currency</label>
-          <select class="form-control" name="currency" [(ngModel)]="selectedCurrency">
-              <option *ngFor="let c of currencies" [ngValue]="c.currency">{{c.currency}}</option>
+        <label for="currency">Currency</label>
+          <select class="form-control"  required name="currency" [(ngModel)]="selectedCurrency">
+              <option *ngFor="let c of currencies"  [ngValue]="c.currency">{{c.currency}}</option>
           </select>
     </div>
     <div class="form-group">

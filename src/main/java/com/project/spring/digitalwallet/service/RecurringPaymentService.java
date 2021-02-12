@@ -98,7 +98,6 @@ public class RecurringPaymentService {
 
         SendMoneyRequest request = new SendMoneyRequest();
         request.setEmail(payment.getRecipient());
-        request.setUsername(userService.getUserByWalletId(payment.getWalletId()).getUsername());
         request.setAccountId(payment.getAccountId());
         request.setAmount(payment.getAmount());
         request.setCurrency(account.getCurrency());

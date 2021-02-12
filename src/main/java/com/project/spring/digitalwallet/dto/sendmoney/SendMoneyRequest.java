@@ -17,8 +17,6 @@ public class SendMoneyRequest {
     @NotNull
     private String currency;
     @NotNull
-    private String username;
-    @NotNull
     private BigDecimal amount;
     @NotNull
     private Long accountId;

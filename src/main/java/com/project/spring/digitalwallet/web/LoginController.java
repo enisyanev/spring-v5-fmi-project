@@ -1,5 +1,6 @@
 package com.project.spring.digitalwallet.web;
 
+import com.project.spring.digitalwallet.dto.registration.AddUserDto;
 import com.project.spring.digitalwallet.dto.registration.RegistrationDto;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.model.user.Credentials;
@@ -50,5 +51,10 @@ public class LoginController {
     @PostMapping("/api/register")
     public User register(@Valid @RequestBody RegistrationDto request) {
         return registrationService.register(request);
+    }
+    
+    @PostMapping("/api/register/user")
+    public User addUser(@Valid @RequestBody AddUserDto request) {
+        return registrationService.addUser(request);
     }
 }

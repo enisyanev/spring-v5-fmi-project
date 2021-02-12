@@ -4,6 +4,7 @@ export class RegistrationDto {
     public password: string,
     public firstName: string,
     public lastName: string,
-    public currency: string) {
+    public currency: string,
+    public username: string) {
   }
 }

@@ -64,5 +64,9 @@ public class UserService {
         userRepo.deleteByUsername(username);
         return removed;
     }
+    
+    public boolean exist(String username) {
+        return userRepo.countByUsername(username) > 0;
+    }
 
 }

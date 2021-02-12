@@ -50,10 +50,6 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public User getUserByWalletId(long walletId) {
-        return userRepo.findByWalletId(walletId);
-    }
-
     public User getUserByEmail(String email) {
         return userRepo.findByUsername(email).orElseThrow(() ->
                 new InvalidEntityDataException("Invalid username or password."));

@@ -1,5 +1,6 @@
 package com.project.spring.digitalwallet.model.user;
 
+import com.project.spring.digitalwallet.dto.registration.AddUserDto;
 import com.project.spring.digitalwallet.dto.registration.RegistrationDto;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,6 +48,14 @@ public class User implements UserDetails {
         this.password = registrationDto.getPassword();
         this.firstname = registrationDto.getFirstName();
         this.lastname = registrationDto.getLastName();
+        this.walletId = walletId;
+    }
+
+    public User(AddUserDto addUserDto, long walletId) {
+        this.username = addUserDto.getUsername();
+        this.password = addUserDto.getPassword();
+        this.firstname = addUserDto.getFirstName();
+        this.lastname = addUserDto.getLastName();
         this.walletId = walletId;
     }
 

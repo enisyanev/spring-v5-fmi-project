@@ -1,10 +1,14 @@
 package com.project.spring.digitalwallet.service;
 
+import com.project.spring.digitalwallet.dto.registration.AddUserDto;
 import com.project.spring.digitalwallet.dto.registration.RegistrationDto;
 import com.project.spring.digitalwallet.exception.InvalidEntityDataException;
 import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.model.user.User;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +48,24 @@ public class RegistrationService {
         scheduledSendMoneyService.executeScheduledSendMoneys(request.getEmail(), newAccount);
 
         return createdUser;
+    }
+    
+    @Transactional
+    public User addUser(AddUserDto request) {
+        if (userService.exist(request.getUsername())) {
+            throw new InvalidEntityDataException("There is already registered user with this username in the system!");
+        }
+        long walletId = getLoggedUser().getId();
+
+        User newUser = new User(request, walletId);
+        User createdUser = userService.addUser(newUser);
+
+        return createdUser;
+    }
+
+    private User getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userService.getUserByUsername(authentication.getName());
     }
 
 }

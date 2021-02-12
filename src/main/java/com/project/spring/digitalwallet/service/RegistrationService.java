@@ -29,6 +29,9 @@ public class RegistrationService {
         if (walletService.exists(request.getEmail())) {
             throw new InvalidEntityDataException("There is already registered wallet with this email in the system!");
         }
+        if (userService.exist(request.getUsername())) {
+            throw new InvalidEntityDataException("There is already registered user with this username in the system!");
+        }
         Wallet wallet = new Wallet(request.getEmail());
         Wallet createdWallet = walletService.addWallet(wallet);
 

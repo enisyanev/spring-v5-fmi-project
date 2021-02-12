@@ -24,5 +24,8 @@ public class RegistrationDto {
 
     @NotNull
     private String lastName;
+    
+    @NotNull
+    private String username;
 
 }

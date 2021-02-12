@@ -34,8 +34,6 @@ public class User implements UserDetails {
     @NotNull
     private String password;
     @NotNull
-    private String email;
-    @NotNull
     private String firstname;
     @NotNull
     private String lastname;
@@ -45,9 +43,8 @@ public class User implements UserDetails {
     private Role role;
 
     public User(RegistrationDto registrationDto, long walletId) {
-        this.username = registrationDto.getEmail();
+        this.username = registrationDto.getUsername();
         this.password = registrationDto.getPassword();
-        this.email = registrationDto.getEmail();
         this.firstname = registrationDto.getFirstName();
         this.lastname = registrationDto.getLastName();
         this.walletId = walletId;

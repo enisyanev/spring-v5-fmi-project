@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AddUserDto } from '../model/AddUserDto';
+import { PermissionsService } from '../_services/permissions.service';
 import { UserManagementService } from '../_services/user-management.service';
 
 @Component({
@@ -17,10 +18,14 @@ export class UserManagementComponent implements OnInit {
     isSuccessful = false;
     isSignUpFailed = false;
     errorMessage = '';
+    permissions = [];
 
-    constructor(private userManagementService: UserManagementService) {
+    constructor(private userManagementService: UserManagementService, private permissionsService: PermissionsService) {
     }
     ngOnInit(): void {
+        this.permissionsService.getPermissions().subscribe(
+            data => this.permissions = data
+        )
     }
 
     onSubmit(): void {

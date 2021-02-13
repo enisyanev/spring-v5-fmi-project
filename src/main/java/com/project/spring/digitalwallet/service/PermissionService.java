@@ -9,7 +9,7 @@ import com.project.spring.digitalwallet.utils.UserPermission;
 @Service
 public class PermissionService {
 
-    public List<UserPermission> getAllPermissions(){
+    public List<UserPermission> getAllPermissions() {
         return UserPermission.getAllPermissions();
     }
 }

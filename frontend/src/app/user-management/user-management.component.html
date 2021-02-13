@@ -73,6 +73,14 @@
             #lastname="ngModel"
           />
         </div>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Permissions</mat-label>
+          <mat-select [(value)]="selected" multiple width="100%">
+            <mat-option *ngFor="let permission of permissions" [value]="permission">{{permission}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
         <div class="form-group">
           <button class="btn btn-primary btn-block">Add user</button>
         </div>

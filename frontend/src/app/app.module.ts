@@ -31,6 +31,7 @@ import { MatSnackBarModule, MatSnackBarRef } from "@angular/material/snack-bar";
 import { ErrorSnackbarComponent } from './shared/error-snackbar/error-snackbar.component';
 import { MatIconModule } from "@angular/material/icon";
 import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
@@ -48,7 +49,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     WithdrawComponent,
     DialogEditReccuring,
     ErrorSnackbarComponent,
-    TransactionsHistoryComponent
+    TransactionsHistoryComponent,
+    UserManagementComponent
   ],
   imports: [
     CommonModule,

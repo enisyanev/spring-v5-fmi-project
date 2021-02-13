@@ -3,6 +3,7 @@ export class AddUserDto {
         public username: string,
         public password: string,
         public firstName: string,
-        public lastName: string) {
+        public lastName: string,
+        public permissions: string[]) {
     }
 }

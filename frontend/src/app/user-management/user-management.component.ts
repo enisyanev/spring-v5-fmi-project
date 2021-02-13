@@ -19,6 +19,7 @@ export class UserManagementComponent implements OnInit {
     isSignUpFailed = false;
     errorMessage = '';
     permissions = [];
+    selected = [];
 
     constructor(private userManagementService: UserManagementService, private permissionsService: PermissionsService) {
     }
@@ -29,7 +30,7 @@ export class UserManagementComponent implements OnInit {
     }
 
     onSubmit(): void {
-        this.userManagementService.addUser(this.form).subscribe(
+        this.userManagementService.addUser(this.form, this.selected).subscribe(
             data => {
                 this.isSuccessful = true;
                 this.isSignUpFailed = false;

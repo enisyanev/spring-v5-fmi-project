@@ -53,7 +53,7 @@ public class LoginController {
         return registrationService.register(request);
     }
     
-    @PostMapping("/api/register/user")
+    @PostMapping("/api/user-management")
     public User addUser(@Valid @RequestBody AddUserDto request) {
         return registrationService.addUser(request);
     }

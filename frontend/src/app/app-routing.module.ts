@@ -12,6 +12,7 @@ import { AccountComponent } from './account/account.component';
 import { ReccuringComponent } from './reccuring/reccuring.component';
 import { WithdrawComponent } from "./withdraw/withdraw.component";
 import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'account/create', component: AccountComponent },
   { path: 'reccuring', component: ReccuringComponent },
   { path: 'transactions/history', component: TransactionsHistoryComponent },
+  { path: 'users/management', component: UserManagementComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

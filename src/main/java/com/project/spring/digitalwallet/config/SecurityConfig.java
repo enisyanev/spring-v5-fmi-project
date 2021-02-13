@@ -58,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PUT, "/api/recurring-payments/**").hasAnyRole(ALL_ROLES)
                 .antMatchers(POST, "/api/payment-instruments/**").hasAnyRole(ALL_ROLES)
                 .antMatchers(PUT, "/api/payment-instruments/**").hasAnyRole(ALL_ROLES)
+                .antMatchers(GET, "/api/permissions").hasAnyRole(ALL_ROLES)
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

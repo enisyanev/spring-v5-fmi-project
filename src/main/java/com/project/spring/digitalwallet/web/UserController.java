@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,17 @@ public class UserController {
     @DeleteMapping
     public User deleteUser(@RequestBody Map<String, String> usermap) {
         return userService.deleteUser(usermap.get("username"));
+    }
+
+    @GetMapping("/management")
+    public List<User> getUsersByWalletId() {
+        return userService.getUsersByWalletId();
+    }
+
+    @DeleteMapping("/{username}")
+    public List<User> deleteUser(@PathVariable("username") String username) {
+        userService.deleteUser(username);
+        return getUsersByWalletId();
     }
 
 }

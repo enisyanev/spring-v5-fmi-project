@@ -8,7 +8,11 @@ import com.project.spring.digitalwallet.model.user.User;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,15 +58,32 @@ public class UserService {
         return userRepo.findByUsername(email).orElseThrow(() ->
                 new InvalidEntityDataException("Invalid username or password."));
     }
-
+    
+    @Transactional
     public User deleteUser(String username) {
         User removed = getUserByUsername(username);
         userRepo.deleteByUsername(username);
         return removed;
     }
-    
+
     public boolean exist(String username) {
         return userRepo.countByUsername(username) > 0;
     }
 
+    public List<User> getByWalletId(long walletId) {
+        return userRepo.findByWalletId(walletId);
+    }
+
+    public List<User> getUsersByWalletId() {
+        User logged = getLoggedUser();
+        List<User> users = getByWalletId(logged.getId());
+        long userId = logged.getId();
+        users.removeIf(x -> x.getId() == userId);
+        return users;
+    }
+
+    private User getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return getUserByUsername(authentication.getName());
+    }
 }

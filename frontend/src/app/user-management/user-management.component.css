@@ -1,4 +1,18 @@
-label {
+  table {
+  width: 100%;
+  }
+
+  .instruments {
+    margin-left: 43%;
+    position: center;
+  }
+
+  .instruments1 {
+    margin-left: 47%;
+    position: center;
+  }
+  
+  label {
     display: block;
     margin-top: 10px;
   }

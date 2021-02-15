@@ -15,9 +15,15 @@ const httpOptions = {
 export class UserManagementService {
     constructor(private http: HttpClient) { }
 
-    addUser(request: AddUserDto, permissions: string[]): Observable<any> {
-        request.permissions = permissions;
+    addUser(request: AddUserDto): Observable<any> {
         return this.http.post(AUTH_API + 'user-management', request, httpOptions);
     }
 
+    getUsers(): Observable<any> {
+        return this.http.get(AUTH_API + 'users/management');
+    }
+
+    deleteUser(username: string): Observable<any> {
+        return this.http.delete(AUTH_API + 'users/' + username);
+    }
 }

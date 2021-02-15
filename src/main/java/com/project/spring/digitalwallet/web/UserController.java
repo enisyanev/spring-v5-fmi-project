@@ -37,14 +37,14 @@ public class UserController {
         userService.updateUser(user);
     }
 
-    @DeleteMapping
-    public User deleteUser(@RequestBody Map<String, String> usermap) {
-        return userService.deleteUser(usermap.get("username"));
-    }
-
     @GetMapping("/management")
     public List<User> getUsersByWalletId() {
         return userService.getUsersByWalletId();
+    }
+    
+    @DeleteMapping
+    public User deleteUser(@RequestBody Map<String, String> usermap) {
+        return userService.deleteUser(usermap.get("username"));
     }
 
     @DeleteMapping("/{username}")

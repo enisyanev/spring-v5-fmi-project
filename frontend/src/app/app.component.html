@@ -5,31 +5,31 @@
       <li class="nav-item">
         <a href="/home" class="nav-link" routerLink="home">Home </a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_DEPOSIT">
         <a href="/deposit" class="nav-link" routerLink="deposit">Deposit</a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_WITHDRAW">
         <a href="/withdraw" class="nav-link" routerLink="withdraw">Withdraw</a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_DONATE">
         <a href="/group/donate" class="nav-link">Donate Group </a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_CREATE_GROUP">
         <a href="/group" class="nav-link" routerLink="group">Create Group </a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_SEND_MONEY">
         <a href="/send-money" class="nav-link">Send Money</a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_CREATE_ACCOUNT">
         <a href="/account/create" class="nav-link">Account Create</a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_USE_RECCURINGS">
         <a href="/reccuring" class="nav-link">Reccurings</a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_SEE_TR_HISTORY">
         <a href="/transactions/history" class="nav-link">Transactions History</a>
       </li>
-      <li class="nav-item" *ngIf="authService.isLoggedIn">
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_USE_USER_MANAGEMENT">
         <a href="/users/management" class="nav-link">User Management</a>
       </li>
     </ul>

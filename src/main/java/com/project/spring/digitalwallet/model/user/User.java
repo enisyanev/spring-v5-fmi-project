@@ -15,6 +15,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +49,7 @@ public class User implements UserDetails {
     @NotNull
     private String lastname;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<UserPermission> permissions;
 
     private long walletId;
@@ -75,9 +76,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(role);
-        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString()))
+        return permissions.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString()))
             .collect(Collectors.toList());
     }
 

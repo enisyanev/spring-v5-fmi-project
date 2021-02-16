@@ -22,7 +22,7 @@ export class UserManagementComponent implements OnInit {
         firstName: '',
         lastName: '',
         username: '',
-        permissions: this.selected
+        permissions: []
     };
 
     constructor(private userManagementService: UserManagementService, private permissionsService: PermissionsService) {
@@ -35,10 +35,12 @@ export class UserManagementComponent implements OnInit {
     }
 
     onSubmit(): void {
+        this.form.permissions = this.selected;
         this.userManagementService.addUser(this.form).subscribe(
             data => {
                 this.isSuccessful = true;
                 this.isSignUpFailed = false;
+                this.users = data;
             },
             err => {
                 this.errorMessage = err.error.message;

@@ -7,6 +7,8 @@ import com.project.spring.digitalwallet.model.Account;
 import com.project.spring.digitalwallet.model.Wallet;
 import com.project.spring.digitalwallet.model.user.User;
 
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,9 +51,9 @@ public class RegistrationService {
 
         return createdUser;
     }
-    
+
     @Transactional
-    public User addUser(AddUserDto request) {
+    public List<User> addUser(AddUserDto request) {
         if (userService.exist(request.getUsername())) {
             throw new InvalidEntityDataException("There is already registered user with this username in the system!");
         }
@@ -60,7 +62,7 @@ public class RegistrationService {
         User newUser = new User(request, walletId);
         User createdUser = userService.addUser(newUser);
 
-        return createdUser;
+        return userService.getUsersByWalletId();
     }
 
     private User getLoggedUser() {

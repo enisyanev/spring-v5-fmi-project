@@ -9,6 +9,7 @@ import com.project.spring.digitalwallet.service.RegistrationService;
 import com.project.spring.digitalwallet.service.UserService;
 import com.project.spring.digitalwallet.utils.JwtUtils;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,7 @@ public class LoginController {
         final String token = jwtUtils.generateToken(user);
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
+        response.put("permissions", user.getPermissions());
         return response;
     }
 
@@ -52,9 +55,9 @@ public class LoginController {
     public User register(@Valid @RequestBody RegistrationDto request) {
         return registrationService.register(request);
     }
-    
+
     @PostMapping("/api/user-management")
-    public User addUser(@Valid @RequestBody AddUserDto request) {
+    public List<User> addUser(@Valid @RequestBody AddUserDto request) {
         return registrationService.addUser(request);
     }
 }

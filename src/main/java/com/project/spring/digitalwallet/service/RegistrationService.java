@@ -62,7 +62,7 @@ public class RegistrationService {
         User newUser = new User(request, walletId);
         User createdUser = userService.addUser(newUser);
 
-        return userService.getByWalletId(walletId);
+        return userService.getUsersByWalletId();
     }
 
     private User getLoggedUser() {

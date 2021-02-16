@@ -76,7 +76,7 @@ public class UserService {
 
     public List<User> getUsersByWalletId() {
         User logged = getLoggedUser();
-        List<User> users = getByWalletId(logged.getId());
+        List<User> users = getByWalletId(logged.getWalletId());
         long userId = logged.getId();
         users.removeIf(x -> x.getId() == userId);
         return users;

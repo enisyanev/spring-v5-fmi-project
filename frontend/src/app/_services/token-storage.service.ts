@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
-
+const PERMISSIONS_KEY = 'auth-permissions';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,5 +34,18 @@ export class TokenStorageService {
     }
 
     return {};
+  }
+
+  public savePermissions(permissions: string[]): void {
+    window.sessionStorage.removeItem(PERMISSIONS_KEY);
+    window.sessionStorage.setItem(PERMISSIONS_KEY, JSON.stringify(permissions));
+  }
+
+  public getPermissions() {
+    let permissions = window.sessionStorage.getItem(PERMISSIONS_KEY);
+    if (permissions) {
+      return JSON.parse(permissions);
+    }
+    return [];
   }
 }

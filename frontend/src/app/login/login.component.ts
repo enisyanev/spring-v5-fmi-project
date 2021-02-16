@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
-  username='';
+  username = '';
 
   constructor(public authService: AuthService, private tokenStorage: TokenStorageService) { }
 
@@ -32,8 +32,9 @@ export class LoginComponent implements OnInit {
       data => {
         this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(username);
-
+        this.tokenStorage.savePermissions(data.permissions);
         this.isLoginFailed = false;
+        this.authService.fillPermissions(data.permissions);
         this.authService.isLoggedIn = true;
         this.username = username;
       },

@@ -38,29 +38,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers(POST, "/api/login", "/api/register").permitAll()
-                .antMatchers(GET, "/api/register/user").hasAnyRole(ALL_ROLES)
-                .antMatchers(GET, "/api/users/management").hasAnyRole(UserPermission.CAN_USE_USER_MANAGEMENT.toString())
-                .antMatchers(GET, "/api/users/**").hasAnyRole(ALL_ROLES)
-                .antMatchers(DELETE, "/api/users/**").hasAnyRole(UserPermission.CAN_USE_USER_MANAGEMENT.toString())
-                .antMatchers(POST, "/api/send-money/**")
-                .hasAnyRole(UserPermission.CAN_SEND_MONEY.toString())
-                .antMatchers(POST, "/api/group/**")
-                .hasAnyRole(UserPermission.CAN_CREATE_GROUP.toString())
-                .antMatchers(GET, "/api/transactions-history").hasAnyRole(UserPermission.CAN_SEE_TR_HISTORY.toString())
-                .antMatchers(POST, "/api/send-money").hasAnyRole(UserPermission.CAN_SEND_MONEY.toString())
-                .antMatchers(POST, "/api/upload").hasAnyRole(UserPermission.CAN_DEPOSIT.toString())
-                .antMatchers(GET, "/api/recurring-payments").hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString())
-                .antMatchers(POST, "/api/recurring-payments").hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString())
-                .antMatchers(DELETE, "/api/recurring-payments/**").hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString())
-                .antMatchers(PUT, "/api/recurring-payments/**").hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString())
+        http.csrf().disable().authorizeRequests().antMatchers(POST, "/api/login", "/api/register").permitAll()
+                .antMatchers(GET, "/api/register/user").hasAnyRole(ALL_ROLES).antMatchers(GET, "/api/users/management")
+                .hasAnyRole(UserPermission.CAN_USE_USER_MANAGEMENT.toString()).antMatchers(GET, "/api/users/**")
+                .hasAnyRole(ALL_ROLES).antMatchers(DELETE, "/api/users/**")
+                .hasAnyRole(UserPermission.CAN_USE_USER_MANAGEMENT.toString()).antMatchers(POST, "/api/send-money/**")
+                .hasAnyRole(UserPermission.CAN_SEND_MONEY.toString()).antMatchers(POST, "/api/group/**")
+                .hasAnyRole(UserPermission.CAN_CREATE_GROUP.toString()).antMatchers(GET, "/api/transactions-history")
+                .hasAnyRole(UserPermission.CAN_SEE_TR_HISTORY.toString()).antMatchers(POST, "/api/send-money")
+                .hasAnyRole(UserPermission.CAN_SEND_MONEY.toString()).antMatchers(POST, "/api/upload")
+                .hasAnyRole(UserPermission.CAN_DEPOSIT.toString()).antMatchers(GET, "/api/recurring-payments")
+                .hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString()).antMatchers(POST, "/api/recurring-payments")
+                .hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString())
+                .antMatchers(DELETE, "/api/recurring-payments/**")
+                .hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString()).antMatchers(PUT, "/api/recurring-payments/**")
+                .hasAnyRole(UserPermission.CAN_USE_RECCURINGS.toString())
                 .antMatchers(POST, "/api/payment-instruments/**").hasAnyRole(UserPermission.CAN_DEPOSIT.toString())
                 .antMatchers(PUT, "/api/payment-instruments/**").hasAnyRole(UserPermission.CAN_DEPOSIT.toString())
                 .antMatchers(GET, "/api/permissions").hasAnyRole(UserPermission.CAN_USE_USER_MANAGEMENT.toString())
-                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(filterChainExceptionHandlerFilter, LogoutFilter.class);

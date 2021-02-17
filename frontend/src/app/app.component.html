@@ -20,6 +20,9 @@
       <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_SEND_MONEY">
         <a href="/send-money" class="nav-link">Send Money</a>
       </li>
+      <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_SEND_MONEY">
+        <a href="/exchange" class="nav-link">Exchange</a>
+      </li>
       <li class="nav-item" *ngIf="authService.isLoggedIn && authService.CAN_CREATE_ACCOUNT">
         <a href="/account/create" class="nav-link">Account Create</a>
       </li>

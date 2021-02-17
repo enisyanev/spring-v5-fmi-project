@@ -21,7 +21,15 @@ export class SendMoneyService {
       "accountId": accountId
     }, httpOptions)
   }
-  
+
+  public exchangeMoney(money: bigint, accountId: number, newAccountId: number): Observable<any> {
+    return this.http.post('http://localhost:8080/api/exchange', {
+      "amount": money,
+      "fromAccount": accountId,
+      "toAccount": newAccountId
+    }, httpOptions)
+  }
+
   uploadFile(file: File): Observable<any> {
     let url = "http://localhost:8080/api/send-money/csv";
     const formdata: FormData = new FormData();

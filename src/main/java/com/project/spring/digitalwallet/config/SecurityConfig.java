@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(POST, "/api/payment-instruments/**").hasAnyRole(UserPermission.CAN_DEPOSIT.toString())
                 .antMatchers(PUT, "/api/payment-instruments/**").hasAnyRole(UserPermission.CAN_DEPOSIT.toString())
                 .antMatchers(GET, "/api/permissions").hasAnyRole(UserPermission.CAN_USE_USER_MANAGEMENT.toString())
+                .antMatchers(POST, "/api/exchange").hasAnyRole(UserPermission.CAN_SEND_MONEY.toString())
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

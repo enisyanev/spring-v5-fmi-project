@@ -1,0 +1,55 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="money">Money</label>
+        <input type="number" class="form-control" formControlName="money"/>
+        <div class="alert-danger">
+          <div *ngIf="formGroup.controls.money.touched && formGroup.controls.money.errors?.required">Money is required</div>
+          <div *ngIf="formGroup.controls.money.touched && formGroup.controls.money.errors?.min">Money is less than allowed</div>
+        </div>
+      </div>
+      <div class="form-group">
+          <label for="currency">Currency</label>
+            <select class="form-control" formControlName="currency" [(ngModel)]="selectedOption" (change)="onChange($event)">
+                <option *ngFor="let account of accounts" [value]="account.id">
+                  {{account.currency}} ({{account.balance}})
+                </option>
+            </select>
+        <div class="alert-danger">
+          <div *ngIf="formGroup.controls.currency.touched && formGroup.controls.currency.errors?.required">Currency is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="newCurrency">New Currency</label>
+          <select class="form-control" formControlName="newCurrency" [(ngModel)]="selectedOption2">
+              <option *ngFor="let account of accountsTo" [value]="account.id">
+                {{account.currency}} ({{account.balance}})
+              </option>
+          </select>
+      <div class="alert-danger">
+        <div *ngIf="formGroup.controls.newCurrency.touched && formGroup.controls.newCurrency.errors?.required">New currency is required</div>
+      </div>
+    </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">
+          Exchange
+        </button>
+      </div>
+    </form>
+
+    <div class="alert alert-success" *ngIf="done && success">
+      {{response}}
+    </div>
+    <div class="alert alert-danger" *ngIf="done && failed">
+      {{response}}
+    </div>
+    <div class="alert alert-warning" *ngIf="done && scheduled">
+      {{response}}
+    </div>
+
+  </div>
+</div>

@@ -13,6 +13,7 @@ import { ReccuringComponent } from './reccuring/reccuring.component';
 import { WithdrawComponent } from "./withdraw/withdraw.component";
 import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { ExchangeComponent } from './exchange/exchange.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'reccuring', component: ReccuringComponent },
   { path: 'transactions/history', component: TransactionsHistoryComponent },
   { path: 'users/management', component: UserManagementComponent },
+  { path: 'exchange', component: ExchangeComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

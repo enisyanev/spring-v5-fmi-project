@@ -12,9 +12,6 @@ import lombok.Setter;
 public class ExchangeRequest {
 
     @NotNull
-    private Long walletId;
-
-    @NotNull
     private Long fromAccount;
 
     @NotNull

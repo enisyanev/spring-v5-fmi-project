@@ -33,6 +33,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { TransactionsHistoryComponent } from './transactions-history/transactions-history.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ExchangeComponent } from './exchange/exchange.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     DialogEditReccuring,
     ErrorSnackbarComponent,
     TransactionsHistoryComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    ExchangeComponent
   ],
   imports: [
     CommonModule,

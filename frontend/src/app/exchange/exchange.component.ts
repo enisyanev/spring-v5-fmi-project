@@ -56,13 +56,19 @@ export class ExchangeComponent implements OnInit {
       ).subscribe(res => {
         this.response = "Money excnahged successfully";
         this.success = true;
+        this.failed = false;
+        this.formGroup.reset();
       }, error => {
         this.response = error.error.message;
         this.failed = true;
+        this.success = false;
       });
   }
 
   onChange(selected: any) {
     this.accountsTo = this.accounts.filter(acc => acc.id != this.selectedOption);
+    if (this.accountsTo[0]) {
+      this.selectedOption2 = this.accountsTo[0].id;
+    }
   }
 }

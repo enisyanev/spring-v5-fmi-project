@@ -31,14 +31,13 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
     response="";
     constructor(private groupService: GroupService,private tokenS:TokenStorageService,private accountService:AccountService) { }
     ngOnInit(): void {
-        console.log(this.tokenS.getUser())
         this.groupService.getAllGroups().subscribe(res => {
             this.groups=res
         })
         this.accountService.getAllAccountByUsername(this.tokenS.getUser()).subscribe(res=>{
             this.currencies=res
         })
-        
+
     }
     onSubmit(): void {
         const {  money,currency } = this.form;
@@ -48,11 +47,10 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
         if(this.groups.length==1){
             this.selectedGroup=this.groups[0].groupName
         }
-        console.log(this.selectedCurrency)
         this.groupService.donateGroup(this.selectedGroup,money,this.selectedCurrency).subscribe(res=>{
             this.response=res.message
         })
         this.done=true;
     }
-      
+
 }

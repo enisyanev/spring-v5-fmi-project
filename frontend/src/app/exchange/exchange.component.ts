@@ -54,7 +54,7 @@ export class ExchangeComponent implements OnInit {
       .pipe(
         finalize(() => this.done = true)
       ).subscribe(res => {
-        this.response = "Money excnahged successfully";
+        this.response = "Money exchanged successfully";
         this.success = true;
         this.failed = false;
         this.formGroup.reset();

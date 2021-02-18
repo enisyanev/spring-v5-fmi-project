@@ -37,7 +37,7 @@ export class WithdrawComponent implements OnInit {
 
   cardForm = new FormGroup({
     name: new FormControl('', Validators.required),
-    cardNumber: new FormControl('', Validators.required),
+    cardNumber: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{16}$/)]),
     cardType: new FormControl('', Validators.required)
   });
 

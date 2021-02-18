@@ -30,17 +30,14 @@ public class TransactionDto {
     }
 
     private String buildDescription(Direction direction) {
-        // TODO finish this
-        BigDecimal amount = this.amount;
         String directionString = "added to";
         if (direction == Direction.W) {
-            amount = amount.negate();
-            directionString = "substracted from";
+            directionString = "subtracted from";
 
         }
         StringBuilder builder = new StringBuilder();
         builder.append("Transaction ").append(id.longValue()).append(": ").append(amount + " ")
-            .append(currency + " ").append("were " + directionString + " ").append("account").append(accountId);
+            .append(currency + " ").append("were " + directionString + " ").append("account ").append(accountId);
         return builder.toString();
 
     }

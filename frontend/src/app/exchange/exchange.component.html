@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="form-group">
-          <label for="currency">Currency</label>
+          <label for="currency">From Currency</label>
             <select class="form-control" formControlName="currency" [(ngModel)]="selectedOption" (change)="onChange($event)">
                 <option *ngFor="let account of accounts" [value]="account.id">
                   {{account.currency}} ({{account.balance}})
@@ -23,7 +23,7 @@
       </div>
 
       <div class="form-group">
-        <label for="newCurrency">New Currency</label>
+        <label for="newCurrency">To Currency</label>
           <select class="form-control" formControlName="newCurrency" [(ngModel)]="selectedOption2">
               <option *ngFor="let account of accountsTo" [value]="account.id">
                 {{account.currency}} ({{account.balance}})

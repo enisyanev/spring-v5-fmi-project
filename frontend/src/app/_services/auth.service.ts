@@ -26,6 +26,8 @@ export class AuthService {
   public CAN_SEE_TR_HISTORY: boolean = false;
   public CAN_USE_USER_MANAGEMENT: boolean = false;
 
+  public permissions: any;
+
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
@@ -49,5 +51,6 @@ export class AuthService {
     this.CAN_USE_RECCURINGS = permissions.indexOf("CAN_USE_RECCURINGS") > -1;
     this.CAN_SEE_TR_HISTORY = permissions.indexOf("CAN_SEE_TR_HISTORY") > -1;
     this.CAN_USE_USER_MANAGEMENT = permissions.indexOf("CAN_USE_USER_MANAGEMENT") > -1;
+    this.permissions = permissions;
   }
 }
